@@ -10,10 +10,31 @@ datasource db {
   url      = "postgresql://postgres:postgres@localhost/app"
 }
 
-// Prisma doesn't allow having a schema with no models
-// remove this when you add real models
-model ExampleModel {
-  id Int @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  someString String
+model User {
+  id              Int       @id @default(autoincrement())
+  username        String    @unique
+  password        String
+  isAdmin         Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  sentMessages    Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+}
+
+model Message {
+  id          Int      @id @default(autoincrement())
+  content     String
+  createdAt   DateTime @default(now())
+  visibleAt   DateTime @default(now())
+  isRead      Boolean  @default(false)
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  senderId    Int
+  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  receiverId  Int
+}
+
+model DelaySetting {
+  id        Int      @id @default(1)
+  minDelay  Int      @default(0)
+  maxDelay  Int      @default(0)
+  updatedAt DateTime @default(now()) @updatedAt
 }

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+
+cd `dirname $0`
+
+npm i
+
+SSH_HOST="root@herald.randomshit.world"
+
+ssh "$SSH_HOST" "docker stop herald || true"
+
+rsync -a --delete --exclude node_modules --exclude .git --exclude .next --exclude dist --exclude for-publishing --exclude .env ./ "$SSH_HOST":/root/herald
+
+ssh "$SSH_HOST" "cd /root/herald && cp prod.env .env && /root/.local/share/pnpm/pnpm dlx codapt@latest run"
+
+# tell the user deploy is done, press enter to ssh into the server and see the docker logs
+echo "Deploy complete. Press Enter to SSH into the server and see the docker logs."
+
+read -n 1 -s -r -p "Press Enter to SSH into the server and see the docker logs..."
+
+ssh "$SSH_HOST" "docker logs -n 1000 -f herald"

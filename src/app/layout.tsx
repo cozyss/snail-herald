@@ -7,11 +7,10 @@ import { Toaster } from "react-hot-toast";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
-  title: "App",
-  description: "",
+  title: "Herald",
+  description: "A time-delayed letter application",
   icons: [
-    // place favicon.ico in public folder and uncomment the following line
-    // { rel: "icon", url: "/favicon.ico" }
+    { rel: "icon", url: "/favicon.ico" }
   ],
 };
 

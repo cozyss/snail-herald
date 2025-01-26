@@ -1,30 +1,29 @@
-import {
-  createCallerFactory,
-  createTRPCRouter,
-  procedure,
-} from "@/server/api/trpc";
+import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
+import { registerUser } from "./procedures/registerUser";
+import { loginUser } from "./procedures/loginUser";
+import { sendMessage } from "./procedures/sendMessage";
+import { getUserMessages } from "./procedures/getUserMessages";
+import { getAllUserStats } from "./procedures/getAllUserStats";
+import { getDelaySettings } from "./procedures/getDelaySettings";
+import { updateDelaySettings } from "./procedures/updateDelaySettings";
+import { searchUsers } from "./procedures/searchUsers";
+import { markMessageAsRead } from "./procedures/markMessageAsRead";
+import { markAllMessagesAsRead } from "./procedures/markAllMessagesAsRead";
 
-/**
- * This is the primary router for your server.
- *
- * Procedures from api/procedures should be added here.
- */
 export const appRouter = createTRPCRouter({
-  // add procedures and subrouters here
-  // when we add a real procedure, remove this placeholder
-  placeholderProcedure: procedure.query(() => {
-    return "placeholder";
-  }),
+  registerUser,
+  loginUser,
+  sendMessage,
+  getUserMessages,
+  getAllUserStats,
+  getDelaySettings,
+  updateDelaySettings,
+  searchUsers,
+  markMessageAsRead,
+  markAllMessagesAsRead,
 });
 
 // export type definition of API
 export type AppRouter = typeof appRouter;
 
-/**
- * Create a server-side caller for the tRPC API.
- * @example
- * const trpc = createCaller(createContext);
- * const res = await trpc.post.all();
- *       ^? Post[]
- */
 export const createCaller = createCallerFactory(appRouter);
