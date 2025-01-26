@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LetterDialog } from "./LetterDialog";
 import Image from "next/image";
 import { colors } from "@/styles/colors";
+import { useTranslation } from "@/utils/i18n";
 
 type LetterItemProps = {
   message: {
@@ -26,6 +27,7 @@ type LetterItemProps = {
 
 export function LetterItem({ message, currentUsername, onMessageRead }: LetterItemProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { t } = useTranslation();
   const isSender = message.sender.username === currentUsername;
   const isAnnouncement = message.sender.isAdmin && !isSender;
 
@@ -60,14 +62,14 @@ export function LetterItem({ message, currentUsername, onMessageRead }: LetterIt
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className={`text-sm font-medium ${colors.text.blue.primary}`}>
-                  {isSender ? "To:" : "From:"}
+                  {isSender ? t("to") : t("from")}
                 </span>
                 <span className={`font-semibold ${colors.text.primary}`}>
                   {isSender ? message.receiver.username : message.sender.username}
                 </span>
                 {isAnnouncement && (
                   <span className={`ml-2 px-2 py-0.5 text-xs font-medium rounded-full ${colors.background.badge.admin} ${colors.badge.admin}`}>
-                    Announcement
+                    {t("announcement")}
                   </span>
                 )}
               </div>

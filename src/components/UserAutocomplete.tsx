@@ -4,6 +4,7 @@ import { Fragment, useState, useEffect, useRef } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { api } from "@/trpc/react";
 import { colors } from "@/styles/colors";
+import { useTranslation } from "@/utils/i18n";
 
 interface UserAutocompleteProps {
   authToken: string;
@@ -18,21 +19,20 @@ export function UserAutocomplete({
   onChange,
   error,
 }: UserAutocompleteProps) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Debounce the search query to reduce API calls
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
-    }, 300); // Wait 300ms before updating the search query
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [query]);
 
-  // Handle clicks outside to close dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -48,8 +48,8 @@ export function UserAutocomplete({
     { authToken, query: debouncedQuery },
     {
       enabled: !!authToken,
-      staleTime: 30000, // Cache results for 30 seconds
-      cacheTime: 60000, // Keep unused data in cache for 1 minute
+      staleTime: 30000,
+      cacheTime: 60000,
     },
   );
 
@@ -57,7 +57,7 @@ export function UserAutocomplete({
 
   const handleChange = (newValue: string) => {
     onChange(newValue);
-    setIsOpen(false); // Close dropdown when a value is selected
+    setIsOpen(false);
   };
 
   return (
@@ -70,7 +70,7 @@ export function UserAutocomplete({
             } p-2 transition-colors duration-200 focus:outline-none ${
               colors.border.input.focus
             } focus:ring-2 focus:ring-offset-2`}
-            placeholder="Enter username"
+            placeholder={t("enterUsername")}
             displayValue={(username: string) => username}
             onChange={(event) => {
               setQuery(event.target.value);

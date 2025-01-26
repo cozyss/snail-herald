@@ -9,9 +9,11 @@ import { LetterItem } from "@/components/LetterItem";
 import { Tab } from "@headlessui/react";
 import { colors } from "@/styles/colors";
 import { SendLetterDialog } from "@/components/SendLetterDialog";
+import { useTranslation } from "@/utils/i18n";
 
 export default function HomePage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [username, setUsername] = useState<string>();
   const [isAdmin, setIsAdmin] = useState<boolean>();
   const [authToken, setAuthToken] = useState<string>();
@@ -64,20 +66,20 @@ export default function HomePage() {
         <div className={`rounded-lg ${colors.background.card} p-10 ${colors.shadow.sm}`}>
           <div className="flex justify-between items-center mb-10">
             <h2 className={`${colors.text.primary} text-2xl font-bold`}>
-              📮 The Pile of Letters
+              {t("letterPile")}
             </h2>
             <button
               onClick={() => setIsSendDialogOpen(true)}
               className={`rounded-md ${colors.background.secondary} px-8 py-3 ${colors.text.white} ${colors.interactive.hover.bg.orange} transition-all duration-200`}
             >
-              Send a Letter
+              {t("sendLetter")}
             </button>
           </div>
           {messagesQuery.isPending ? (
-            <p className="py-8 text-center">Loading letters...</p>
+            <p className="py-8 text-center">{t("loadingLetters")}</p>
           ) : messagesQuery.error ? (
             <p className={`py-8 text-center ${colors.text.error}`}>
-              Error loading letters
+              {t("errorLoadingLetters")}
             </p>
           ) : (
             <Tab.Group defaultIndex={0}>
@@ -92,7 +94,7 @@ export default function HomePage() {
                   }
                 >
                   <div className="flex items-center gap-1.5">
-                    <span>📨 Letter Inbox</span>
+                    <span>{t("letterInbox")}</span>
                     {hasUnreadMessages && (
                       <span
                         className={`inline-flex h-[10px] w-[10px] rounded-full ${colors.background.notification} ring-2 ring-red-300`}
@@ -109,7 +111,7 @@ export default function HomePage() {
                     }`
                   }
                 >
-                  📫 Letter Outbox
+                  {t("letterOutbox")}
                 </Tab>
               </Tab.List>
               <Tab.Panels>
@@ -125,7 +127,7 @@ export default function HomePage() {
                     ))}
                     {messagesQuery.data?.receivedMessages.length === 0 && (
                       <p className={`py-12 text-center ${colors.text.muted}`}>
-                        No received letters
+                        {t("noReceivedLetters")}
                       </p>
                     )}
                   </div>
@@ -142,7 +144,7 @@ export default function HomePage() {
                     ))}
                     {messagesQuery.data?.sentMessages.length === 0 && (
                       <p className={`py-12 text-center ${colors.text.muted}`}>
-                        No sent letters
+                        {t("noSentLetters")}
                       </p>
                     )}
                   </div>

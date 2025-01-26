@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { colors } from "@/styles/colors";
 import { api } from "@/trpc/react";
 import toast from "react-hot-toast";
+import { useTranslation } from "@/utils/i18n";
 
 type SendAnnouncementDialogProps = {
   isOpen: boolean;
@@ -15,13 +16,14 @@ type SendAnnouncementDialogProps = {
 };
 
 export function SendAnnouncementDialog({ isOpen, onClose, authToken, onSuccess }: SendAnnouncementDialogProps) {
+  const { t } = useTranslation();
   const { register, handleSubmit, formState: { errors }, reset } = useForm<{
     content: string;
   }>();
 
   const sendAnnouncementMutation = api.sendAnnouncement.useMutation({
     onSuccess: () => {
-      toast.success("Announcement sent successfully!");
+      toast.success(t("announcementSentSuccess"));
       reset();
       onSuccess?.();
       onClose();
@@ -66,7 +68,7 @@ export function SendAnnouncementDialog({ isOpen, onClose, authToken, onSuccess }
             >
               <Dialog.Panel className={`w-full max-w-2xl transform overflow-hidden rounded-2xl ${colors.background.card} p-8 text-left align-middle shadow-xl transition-all`}>
                 <Dialog.Title as="h3" className={`text-xl font-semibold leading-6 ${colors.text.blue.primary} border-b border-blue-100 pb-4`}>
-                  Send an Announcement
+                  {t("sendAnnouncement")}
                 </Dialog.Title>
 
                 <form onSubmit={onSubmit} className="mt-6 space-y-6">
@@ -81,7 +83,7 @@ export function SendAnnouncementDialog({ isOpen, onClose, authToken, onSuccess }
                   >
                     <textarea
                       {...register("content", {
-                        required: "Announcement content is required",
+                        required: t("letterContent"),
                       })}
                       className={`w-full bg-transparent p-0 focus:outline-none ${colors.text.secondary} text-lg`}
                       style={{
@@ -90,7 +92,7 @@ export function SendAnnouncementDialog({ isOpen, onClose, authToken, onSuccess }
                         resize: 'none',
                         height: '300px'
                       }}
-                      placeholder="Type your announcement here..."
+                      placeholder={t("typeLetterHere")}
                     />
                   </div>
                   {errors.content && (
@@ -105,14 +107,14 @@ export function SendAnnouncementDialog({ isOpen, onClose, authToken, onSuccess }
                       onClick={onClose}
                       className={`rounded-md px-4 py-2 text-sm font-medium ${colors.text.primary} ${colors.background.hover.card} border ${colors.border.card.normal}`}
                     >
-                      Cancel
+                      {t("cancel")}
                     </button>
                     <button
                       type="submit"
                       disabled={sendAnnouncementMutation.isPending}
                       className={`rounded-md ${colors.background.primary} px-6 py-2 text-sm font-medium ${colors.text.white} ${colors.interactive.hover.bg.blue} transition-all duration-200 disabled:${colors.background.disabled}`}
                     >
-                      {sendAnnouncementMutation.isPending ? "Sending..." : "Send Announcement"}
+                      {sendAnnouncementMutation.isPending ? t("sending") : t("send")}
                     </button>
                   </div>
                 </form>

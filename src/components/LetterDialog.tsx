@@ -3,6 +3,7 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { colors } from "@/styles/colors";
+import { useTranslation } from "@/utils/i18n";
 
 type LetterDialogProps = {
   isOpen: boolean;
@@ -23,6 +24,8 @@ type LetterDialogProps = {
 };
 
 export function LetterDialog({ isOpen, onClose, message, isSender, isAnnouncement }: LetterDialogProps) {
+  const { t } = useTranslation();
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
@@ -53,13 +56,13 @@ export function LetterDialog({ isOpen, onClose, message, isSender, isAnnouncemen
                 <Dialog.Title as="h3" className={`text-xl font-semibold leading-6 ${colors.text.blue.primary} border-b border-blue-100 pb-4`}>
                   {isAnnouncement && (
                     <span className={`inline-block mb-2 px-2 py-0.5 text-sm font-medium rounded-full ${colors.background.badge.admin} ${colors.badge.admin}`}>
-                      Announcement
+                      {t("announcement")}
                     </span>
                   )}
                   <div className="flex items-center gap-2">
-                    <span className={`${colors.text.muted} font-medium`}>From:</span>
+                    <span className={`${colors.text.muted} font-medium`}>{t("from")}:</span>
                     <span className="font-semibold">{message.sender.username}</span>
-                    <span className={`${colors.text.muted} font-medium`}>To:</span>
+                    <span className={`${colors.text.muted} font-medium`}>{t("to")}:</span>
                     <span className="font-semibold">{message.receiver.username}</span>
                   </div>
                 </Dialog.Title>
@@ -84,7 +87,7 @@ export function LetterDialog({ isOpen, onClose, message, isSender, isAnnouncemen
                   </p>
                 </div>
                 <div className={`mt-6 text-sm ${colors.text.muted} font-medium`}>
-                  Sent at: {new Date(message.createdAt).toLocaleString([], {
+                  {t("sentAt")} {new Date(message.createdAt).toLocaleString([], {
                     year: 'numeric',
                     month: 'numeric',
                     day: 'numeric',
@@ -100,7 +103,7 @@ export function LetterDialog({ isOpen, onClose, message, isSender, isAnnouncemen
                     className={`inline-flex justify-center rounded-md border border-transparent ${colors.background.primary} px-6 py-2.5 text-sm font-medium ${colors.text.white} transition-all duration-200 ${colors.interactive.hover.bg.blue} hover:shadow-md focus:outline-none focus:ring-2 ${colors.ring.focus.blue} focus:ring-offset-2`}
                     onClick={onClose}
                   >
-                    Close Letter
+                    {t("closeLetter")}
                   </button>
                 </div>
               </Dialog.Panel>

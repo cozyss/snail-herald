@@ -7,6 +7,7 @@ import { UserAutocomplete } from "./UserAutocomplete";
 import { colors } from "@/styles/colors";
 import { api } from "@/trpc/react";
 import toast from "react-hot-toast";
+import { useTranslation } from "@/utils/i18n";
 
 type SendLetterDialogProps = {
   isOpen: boolean;
@@ -16,6 +17,7 @@ type SendLetterDialogProps = {
 };
 
 export function SendLetterDialog({ isOpen, onClose, authToken, onSuccess }: SendLetterDialogProps) {
+  const { t } = useTranslation();
   const { register, handleSubmit, watch, setValue, formState: { errors }, reset } = useForm<{
     receiverUsername: string;
     content: string;
@@ -23,7 +25,7 @@ export function SendLetterDialog({ isOpen, onClose, authToken, onSuccess }: Send
 
   const sendMessageMutation = api.sendMessage.useMutation({
     onSuccess: () => {
-      toast.success("Letter sent successfully!");
+      toast.success(t("letterSentSuccess"));
       reset();
       onSuccess?.();
       onClose();
@@ -69,13 +71,13 @@ export function SendLetterDialog({ isOpen, onClose, authToken, onSuccess }: Send
             >
               <Dialog.Panel className={`w-full max-w-2xl transform overflow-hidden rounded-2xl ${colors.background.card} p-8 text-left align-middle shadow-xl transition-all`}>
                 <Dialog.Title as="h3" className={`text-xl font-semibold leading-6 ${colors.text.blue.primary} border-b border-blue-100 pb-4`}>
-                  Send a Letter
+                  {t("sendLetter")}
                 </Dialog.Title>
 
                 <form onSubmit={onSubmit} className="mt-6 space-y-6">
                   <div className="flex items-center gap-2">
                     <label className={`text-sm font-medium ${colors.text.secondary} whitespace-nowrap`}>
-                      To:
+                      {t("to")}
                     </label>
                     <div className="flex-1">
                       <UserAutocomplete
@@ -98,7 +100,7 @@ export function SendLetterDialog({ isOpen, onClose, authToken, onSuccess }: Send
                   >
                     <textarea
                       {...register("content", {
-                        required: "Letter content is required",
+                        required: t("letterContent"),
                       })}
                       className={`w-full bg-transparent p-0 focus:outline-none ${colors.text.secondary} text-lg`}
                       style={{
@@ -107,7 +109,7 @@ export function SendLetterDialog({ isOpen, onClose, authToken, onSuccess }: Send
                         resize: 'none',
                         height: '300px'
                       }}
-                      placeholder="Type your letter here..."
+                      placeholder={t("typeLetterHere")}
                     />
                   </div>
                   {errors.content && (
@@ -122,14 +124,14 @@ export function SendLetterDialog({ isOpen, onClose, authToken, onSuccess }: Send
                       onClick={onClose}
                       className={`rounded-md px-4 py-2 text-sm font-medium ${colors.text.primary} ${colors.background.hover.card} border ${colors.border.card.normal}`}
                     >
-                      Cancel
+                      {t("cancel")}
                     </button>
                     <button
                       type="submit"
                       disabled={sendMessageMutation.isPending}
                       className={`rounded-md ${colors.background.primary} px-6 py-2 text-sm font-medium ${colors.text.white} ${colors.interactive.hover.bg.blue} transition-all duration-200 disabled:${colors.background.disabled}`}
                     >
-                      {sendMessageMutation.isPending ? "Sending..." : "Send Letter"}
+                      {sendMessageMutation.isPending ? t("sending") : t("send")}
                     </button>
                   </div>
                 </form>

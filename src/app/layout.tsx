@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 
 import { TRPCReactProvider } from "@/trpc/react";
+import { LanguageProvider } from "@/utils/i18n";
 
 export const metadata: Metadata = {
   title: "Herald",
@@ -21,8 +22,10 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>
-          {children}
-          <Toaster />
+          <LanguageProvider>
+            {children}
+            <Toaster />
+          </LanguageProvider>
         </TRPCReactProvider>
       </body>
     </html>
