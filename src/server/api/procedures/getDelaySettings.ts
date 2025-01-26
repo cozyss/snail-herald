@@ -6,8 +6,8 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET ?? "your-secret-key";
 
-// Convert days to seconds
-const SECONDS_IN_DAY = 86400;
+// Convert hours to seconds
+const SECONDS_IN_HOUR = 3600;
 
 export const getDelaySettings = procedure
   .input(
@@ -46,11 +46,11 @@ export const getDelaySettings = procedure
         });
       }
 
-      // Convert seconds to days for display
+      // Convert seconds to hours for display
       return {
         ...settings,
-        minDelay: settings.minDelay / SECONDS_IN_DAY,
-        maxDelay: settings.maxDelay / SECONDS_IN_DAY,
+        minDelay: settings.minDelay / SECONDS_IN_HOUR,
+        maxDelay: settings.maxDelay / SECONDS_IN_HOUR,
       };
     } catch (error) {
       throw new TRPCError({

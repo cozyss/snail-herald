@@ -14,6 +14,7 @@ type LetterItemProps = {
     isRead: boolean;
     sender: {
       username: string;
+      isAdmin: boolean;
     };
     receiver: {
       username: string;
@@ -26,22 +27,25 @@ type LetterItemProps = {
 export function LetterItem({ message, currentUsername, onMessageRead }: LetterItemProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const isSender = message.sender.username === currentUsername;
+  const isAnnouncement = message.sender.isAdmin && !isSender;
 
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
-    if (!isSender && !message.isRead && new Date(message.visibleAt) <= new Date() && onMessageRead) {
+    if (!message.isRead && new Date(message.visibleAt) <= new Date() && onMessageRead) {
       onMessageRead(message.id);
     }
   };
+
+  const previewText = message.content.slice(0, 25) + (message.content.length > 25 ? "..." : "");
 
   return (
     <>
       <div className="mb-4 w-full">
         <div 
-          className={`relative w-full rounded-lg border ${colors.border.card.normal} ${colors.background.card} p-6 ${colors.shadow.sm} transition-all duration-200 ${colors.border.card.hover} ${colors.shadow.hover} cursor-pointer min-h-[100px]`}
+          className={`relative w-full rounded-lg border ${colors.border.card.normal} ${isAnnouncement ? 'bg-amber-100' : colors.background.card} p-6 ${colors.shadow.sm} transition-all duration-200 ${colors.border.card.hover} ${colors.shadow.hover} cursor-pointer min-h-[100px]`}
           onClick={handleOpenDialog}
         >
-          {!isSender && (
+          {!isSender && !message.sender.isAdmin && (
             <div className="absolute top-2 right-2 w-16 h-16 transition-transform duration-200 hover:scale-105">
               <Image
                 src="/stamp.jpeg"
@@ -61,6 +65,14 @@ export function LetterItem({ message, currentUsername, onMessageRead }: LetterIt
                 <span className={`font-semibold ${colors.text.primary}`}>
                   {isSender ? message.receiver.username : message.sender.username}
                 </span>
+                {isAnnouncement && (
+                  <span className={`ml-2 px-2 py-0.5 text-xs font-medium rounded-full ${colors.background.badge.admin} ${colors.badge.admin}`}>
+                    Announcement
+                  </span>
+                )}
+              </div>
+              <div className={`mt-2 text-sm ${colors.text.muted}`}>
+                {previewText}
               </div>
             </div>
           </div>
@@ -82,6 +94,7 @@ export function LetterItem({ message, currentUsername, onMessageRead }: LetterIt
         onClose={() => setIsDialogOpen(false)}
         message={message}
         isSender={isSender}
+        isAnnouncement={isAnnouncement}
       />
     </>
   );

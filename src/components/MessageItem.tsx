@@ -43,6 +43,8 @@ export function MessageItem({
     }
   };
 
+  const previewText = message.content.slice(0, 25) + (message.content.length > 25 ? "..." : "");
+
   return (
     <>
       <div className="mb-2 w-full">
@@ -72,6 +74,9 @@ export function MessageItem({
                     ? message.receiver.username
                     : message.sender.username}
                 </span>
+              </div>
+              <div className={`mt-2 text-sm ${colors.text.muted}`}>
+                {previewText}
               </div>
             </div>
           </div>

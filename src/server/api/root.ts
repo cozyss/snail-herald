@@ -8,6 +8,7 @@ import { getDelaySettings } from "./procedures/getDelaySettings";
 import { updateDelaySettings } from "./procedures/updateDelaySettings";
 import { searchUsers } from "./procedures/searchUsers";
 import { markMessageAsRead } from "./procedures/markMessageAsRead";
+import { sendAnnouncement } from "./procedures/sendAnnouncement";
 
 export const appRouter = createTRPCRouter({
   registerUser,
@@ -19,6 +20,7 @@ export const appRouter = createTRPCRouter({
   updateDelaySettings,
   searchUsers,
   markMessageAsRead,
+  sendAnnouncement,
 });
 
 // export type definition of API

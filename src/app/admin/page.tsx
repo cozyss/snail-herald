@@ -7,6 +7,7 @@ import { NavigationBar } from "@/components/NavigationBar";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { colors } from "@/styles/colors";
+import { SendAnnouncementDialog } from "@/components/SendAnnouncementDialog";
 
 type DelaySettingsFormData = {
   minDelay: number;
@@ -19,6 +20,7 @@ export default function AdminDashboard() {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [authToken, setAuthToken] = useState<string>("");
   const [isEditingDelays, setIsEditingDelays] = useState(false);
+  const [isAnnouncementDialogOpen, setIsAnnouncementDialogOpen] = useState(false);
 
   // Initialize user data from localStorage
   useEffect(() => {
@@ -87,6 +89,24 @@ export default function AdminDashboard() {
     <div>
       <NavigationBar username={username} isAdmin={isAdmin} />
       <div className="container mx-auto max-w-6xl p-4">
+        {/* Send Announcement Button */}
+        <div className={`mb-4 flex justify-end`}>
+          <button
+            onClick={() => setIsAnnouncementDialogOpen(true)}
+            className={`rounded-md ${colors.background.primary} px-4 py-2 text-sm font-medium ${colors.text.white} ${colors.interactive.hover.bg.blue} transition-all duration-200`}
+          >
+            Send an Announcement
+          </button>
+        </div>
+
+        <SendAnnouncementDialog
+          isOpen={isAnnouncementDialogOpen}
+          onClose={() => setIsAnnouncementDialogOpen(false)}
+          authToken={authToken}
+          onSuccess={() => {
+            // Optionally refresh any data if needed
+          }}
+        />
         {/* Current Delay Settings Display */}
         <div className={`mb-4 flex items-center justify-between rounded-lg ${colors.background.card} p-4 ${colors.shadow.sm}`}>
           <div className="flex items-center gap-4">
@@ -95,7 +115,7 @@ export default function AdminDashboard() {
               <span className={`text-sm ${colors.text.muted}`}>Loading...</span>
             ) : delaySettingsQuery.data ? (
               <span className={`text-sm font-semibold ${colors.text.primary}`}>
-                {delaySettingsQuery.data.minDelay} - {delaySettingsQuery.data.maxDelay} days
+                {delaySettingsQuery.data.minDelay} - {delaySettingsQuery.data.maxDelay} hours
               </span>
             ) : (
               <span className={`text-sm ${colors.text.error}`}>Error loading settings</span>
@@ -120,7 +140,7 @@ export default function AdminDashboard() {
                     htmlFor="minDelay"
                     className={`mb-1 block text-sm font-medium ${colors.text.secondary}`}
                   >
-                    Minimum Delay (days)
+                    Minimum Delay (hours)
                   </label>
                   <input
                     type="number"
@@ -142,7 +162,7 @@ export default function AdminDashboard() {
                     htmlFor="maxDelay"
                     className={`mb-1 block text-sm font-medium ${colors.text.secondary}`}
                   >
-                    Maximum Delay (days)
+                    Maximum Delay (hours)
                   </label>
                   <input
                     type="number"

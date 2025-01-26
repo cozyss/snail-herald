@@ -55,9 +55,14 @@ export function UserAutocomplete({
 
   const filteredUsers = searchQuery.data ?? [];
 
+  const handleChange = (newValue: string) => {
+    onChange(newValue);
+    setIsOpen(false); // Close dropdown when a value is selected
+  };
+
   return (
     <div className="relative w-full" ref={containerRef}>
-      <Combobox value={value} onChange={onChange}>
+      <Combobox value={value} onChange={handleChange}>
         <div className="relative w-full">
           <Combobox.Input
             className={`w-full rounded-md border ${

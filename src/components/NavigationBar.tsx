@@ -4,7 +4,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { colors } from "@/styles/colors";
 
-export function NavigationBar({ username, isAdmin }: { username?: string; isAdmin?: boolean }) {
+export function NavigationBar({
+  username,
+  isAdmin,
+}: {
+  username?: string;
+  isAdmin?: boolean;
+}) {
   const router = useRouter();
 
   const handleLogout = () => {
@@ -20,32 +26,34 @@ export function NavigationBar({ username, isAdmin }: { username?: string; isAdmi
         <div className="flex items-center space-x-6">
           {username ? (
             <>
-              <Link 
-                href="/home" 
+              <Link
+                href="/home"
                 className={`${colors.text.white} text-lg font-medium transition-colors duration-200 ${colors.interactive.hover.text.light}`}
               >
                 Home
               </Link>
               {isAdmin && (
-                <Link 
-                  href="/admin" 
+                <Link
+                  href="/admin"
                   className={`${colors.text.white} text-lg font-medium transition-colors duration-200 ${colors.interactive.hover.text.light}`}
                 >
-                  Admin Dashboard
+                  Dashboard
                 </Link>
               )}
-              <span className={`${colors.text.blue.light} text-lg`}>Welcome, <span className="font-semibold">{username}</span></span>
+              <span className={`${colors.text.blue.light} text-lg`}>
+                Welcome, <span className="font-semibold">{username}</span>
+              </span>
             </>
           ) : (
             <>
-              <Link 
-                href="/login" 
+              <Link
+                href="/login"
                 className={`${colors.text.white} text-lg font-medium transition-colors duration-200 ${colors.interactive.hover.text.light}`}
               >
                 Login
               </Link>
-              <Link 
-                href="/register" 
+              <Link
+                href="/register"
                 className={`${colors.text.white} text-lg font-medium transition-colors duration-200 ${colors.interactive.hover.text.light}`}
               >
                 Register

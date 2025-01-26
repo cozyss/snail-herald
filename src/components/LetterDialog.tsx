@@ -12,15 +12,17 @@ type LetterDialogProps = {
     createdAt: Date;
     sender: {
       username: string;
+      isAdmin: boolean;
     };
     receiver: {
       username: string;
     };
   };
   isSender: boolean;
+  isAnnouncement?: boolean;
 };
 
-export function LetterDialog({ isOpen, onClose, message, isSender }: LetterDialogProps) {
+export function LetterDialog({ isOpen, onClose, message, isSender, isAnnouncement }: LetterDialogProps) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
@@ -47,15 +49,22 @@ export function LetterDialog({ isOpen, onClose, message, isSender }: LetterDialo
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className={`w-full max-w-2xl transform overflow-hidden rounded-2xl ${colors.background.card} p-8 text-left align-middle shadow-xl transition-all`}>
+              <Dialog.Panel className={`w-full max-w-2xl transform overflow-hidden rounded-2xl ${isAnnouncement ? 'bg-amber-100' : colors.background.card} p-8 text-left align-middle shadow-xl transition-all`}>
                 <Dialog.Title as="h3" className={`text-xl font-semibold leading-6 ${colors.text.blue.primary} border-b border-blue-100 pb-4`}>
-                  <span className={`${colors.text.muted} font-medium`}>From:</span>{" "}
-                  <span className="font-semibold">{message.sender.username}</span>{" "}
-                  <span className={`${colors.text.muted} font-medium`}>To:</span>{" "}
-                  <span className="font-semibold">{message.receiver.username}</span>
+                  {isAnnouncement && (
+                    <span className={`inline-block mb-2 px-2 py-0.5 text-sm font-medium rounded-full ${colors.background.badge.admin} ${colors.badge.admin}`}>
+                      Announcement
+                    </span>
+                  )}
+                  <div className="flex items-center gap-2">
+                    <span className={`${colors.text.muted} font-medium`}>From:</span>
+                    <span className="font-semibold">{message.sender.username}</span>
+                    <span className={`${colors.text.muted} font-medium`}>To:</span>
+                    <span className="font-semibold">{message.receiver.username}</span>
+                  </div>
                 </Dialog.Title>
                 <div 
-                  className={`mt-8 min-h-[300px] ${colors.background.card} rounded-lg p-6`} 
+                  className={`mt-8 min-h-[300px] ${isAnnouncement ? 'bg-amber-100' : colors.background.card} rounded-lg p-6`} 
                   style={{ 
                     backgroundImage: 'linear-gradient(#e5e7eb 1px, transparent 1px)',
                     backgroundSize: '100% 32px',

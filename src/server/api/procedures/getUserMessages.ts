@@ -25,6 +25,7 @@ export const getUserMessages = procedure
             sender: {
               select: {
                 username: true,
+                isAdmin: true,
               },
             },
             receiver: {
@@ -48,6 +49,7 @@ export const getUserMessages = procedure
             sender: {
               select: {
                 username: true,
+                isAdmin: true,
               },
             },
             receiver: {

@@ -50,7 +50,7 @@ export default function HomePage() {
   };
 
   const hasUnreadMessages = messagesQuery.data?.receivedMessages.some(
-    (message) => !message.isRead,
+    (message) => !message.isRead && new Date(message.visibleAt) <= new Date(),
   );
 
   if (!authToken || !username) {
@@ -91,12 +91,14 @@ export default function HomePage() {
                     }`
                   }
                 >
-                  📨 Letter Inbox
-                  {hasUnreadMessages && (
-                    <span
-                      className={`absolute -right-1 -top-1 h-3 w-3 rounded-full ${colors.background.notification}`}
-                    />
-                  )}
+                  <div className="flex items-center gap-1.5">
+                    <span>📨 Letter Inbox</span>
+                    {hasUnreadMessages && (
+                      <span
+                        className={`inline-flex h-[10px] w-[10px] rounded-full ${colors.background.notification} ring-2 ring-red-300`}
+                      />
+                    )}
+                  </div>
                 </Tab>
                 <Tab
                   className={({ selected }) =>
@@ -135,6 +137,7 @@ export default function HomePage() {
                         key={message.id}
                         message={message}
                         currentUsername={username}
+                        onMessageRead={handleMessageRead}
                       />
                     ))}
                     {messagesQuery.data?.sentMessages.length === 0 && (

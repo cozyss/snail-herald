@@ -18,7 +18,7 @@ export const colors = {
   background: {
     page: "bg-amber-50", // Main page background
     card: "bg-white", // Card/container backgrounds
-    primary: "bg-emerald-900", // Primary action backgrounds
+    primary: "bg-emerald-800", // Primary action backgrounds
     secondary: "bg-orange-400", // Secondary action backgrounds
     hover: {
       primary: "hover:bg-orange-600", // Hover state for primary buttons
