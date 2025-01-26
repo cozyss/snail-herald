@@ -6,9 +6,9 @@
   html {
     @apply antialiased;
   }
-  
+
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-white text-gray-900;
   }
 
   h1 {
@@ -24,6 +24,6 @@
   }
 
   p {
-    @apply text-base text-gray-700 leading-relaxed;
+    @apply text-base leading-relaxed text-gray-700;
   }
 }

@@ -58,11 +58,19 @@ export function LetterDialog({ isOpen, onClose, message, isSender }: LetterDialo
                   className={`mt-8 min-h-[300px] ${colors.background.card} rounded-lg p-6`} 
                   style={{ 
                     backgroundImage: 'linear-gradient(#e5e7eb 1px, transparent 1px)',
-                    backgroundSize: '100% 2rem',
-                    lineHeight: '2rem'
+                    backgroundSize: '100% 32px',
+                    backgroundPosition: '0 32px',
+                    paddingTop: '0'
                   }}
                 >
-                  <p className={`${colors.text.secondary} whitespace-pre-wrap text-lg`}>
+                  <p 
+                    className={`${colors.text.secondary} whitespace-pre-wrap text-lg`}
+                    style={{
+                      lineHeight: '32px',
+                      margin: 0,
+                      paddingBottom: '16px'
+                    }}
+                  >
                     {message.content}
                   </p>
                 </div>

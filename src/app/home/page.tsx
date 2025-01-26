@@ -2,185 +2,117 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { UserAutocomplete } from "@/components/UserAutocomplete";
 import { api } from "@/trpc/react";
 import toast from "react-hot-toast";
 import { NavigationBar } from "@/components/NavigationBar";
 import { LetterItem } from "@/components/LetterItem";
 import { Tab } from "@headlessui/react";
 import { colors } from "@/styles/colors";
+import { SendLetterDialog } from "@/components/SendLetterDialog";
 
 export default function HomePage() {
   const router = useRouter();
-  const [username, setUsername] = useState<string>("");
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [authToken, setAuthToken] = useState<string>("");
+  const [username, setUsername] = useState<string>();
+  const [isAdmin, setIsAdmin] = useState<boolean>();
+  const [authToken, setAuthToken] = useState<string>();
+  const [isSendDialogOpen, setIsSendDialogOpen] = useState(false);
 
-  // Initialize user data from localStorage
   useEffect(() => {
+    const storedToken = localStorage.getItem("authToken");
     const storedUsername = localStorage.getItem("username");
     const storedIsAdmin = localStorage.getItem("isAdmin") === "true";
-    const storedAuthToken = localStorage.getItem("authToken");
 
-    if (!storedUsername || !storedAuthToken) {
+    if (!storedToken || !storedUsername) {
       router.push("/login");
       return;
     }
 
+    setAuthToken(storedToken);
     setUsername(storedUsername);
     setIsAdmin(storedIsAdmin);
-    setAuthToken(storedAuthToken);
   }, [router]);
 
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
-    defaultValues: {
-      receiverUsername: "",
-      content: "",
-    },
-  });
-
   const messagesQuery = api.getUserMessages.useQuery(
-    { authToken },
-    {
-      enabled: !!authToken,
-    }
+    { authToken: authToken ?? "" },
+    { enabled: !!authToken },
   );
 
-  const sendMessageMutation = api.sendMessage.useMutation({
+  const markMessageAsReadMutation = api.markMessageAsRead.useMutation({
     onSuccess: () => {
-      toast.success("Letter sent successfully!");
-      setValue("receiverUsername", "");
-      setValue("content", "");
-      messagesQuery.refetch();
-    },
-    onError: (error) => {
-      if (error.message.includes("User not found")) {
-        toast.error("The recipient username does not exist. Please check the username and try again.");
-      } else {
-        toast.error(error.message);
-      }
+      void messagesQuery.refetch();
     },
   });
 
-  const markAllMessagesAsReadMutation = api.markAllMessagesAsRead.useMutation({
-    onSuccess: () => {
-      messagesQuery.refetch();
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
-
-  const onSubmit = handleSubmit((data) => {
-    sendMessageMutation.mutate({
-      authToken,
-      receiverUsername: data.receiverUsername,
-      content: data.content,
-    });
-  });
-
-  const handleMessageRead = () => {
-    messagesQuery.refetch();
+  const handleMessageRead = (messageId: number) => {
+    if (authToken) {
+      markMessageAsReadMutation.mutate({ messageId, authToken });
+    }
   };
 
   const hasUnreadMessages = messagesQuery.data?.receivedMessages.some(
-    (message) => !message.isRead && new Date(message.visibleAt) <= new Date()
+    (message) => !message.isRead,
   );
 
-  if (!username || !authToken) {
+  if (!authToken || !username) {
     return null;
   }
 
   return (
-    <div>
+    <div className="min-h-screen">
       <NavigationBar username={username} isAdmin={isAdmin} />
-      <div className="container mx-auto max-w-4xl p-4">
-        <div className={`mb-8 rounded-lg ${colors.background.card} p-6 ${colors.shadow.sm}`}>
-          <h2 className={`${colors.text.primary} text-xl font-bold`}>Send a Letter</h2>
-          <form onSubmit={onSubmit} className="space-y-4">
-            <div>
-              <UserAutocomplete
-                authToken={authToken}
-                value={watch("receiverUsername") || ""}
-                onChange={(value) => setValue("receiverUsername", value)}
-                error={errors.receiverUsername?.message}
-              />
-            </div>
-            <div>
-              <textarea
-                {...register("content", {
-                  required: "Letter content is required",
-                })}
-                className={`w-full rounded-md border ${colors.border.input.normal} p-2`}
-                rows={3}
-                placeholder="Type your letter here..."
-              />
-              {errors.content && (
-                <p className={`mt-1 text-sm ${colors.text.error}`}>
-                  {errors.content.message}
-                </p>
-              )}
-            </div>
+      <div className="container mx-auto max-w-4xl px-4 py-12">
+        <div className={`rounded-lg ${colors.background.card} p-10 ${colors.shadow.sm}`}>
+          <div className="flex justify-between items-center mb-10">
+            <h2 className={`${colors.text.primary} text-2xl font-bold`}>
+              📮 The Pile of Letters
+            </h2>
             <button
-              type="submit"
-              disabled={sendMessageMutation.isPending}
-              className={`rounded-md ${colors.background.primary} px-4 py-2 ${colors.text.white} ${colors.interactive.hover.bg.blue} ${colors.background.disabled}`}
+              onClick={() => setIsSendDialogOpen(true)}
+              className={`rounded-md ${colors.background.secondary} px-8 py-3 ${colors.text.white} ${colors.interactive.hover.bg.orange} transition-all duration-200`}
             >
-              {sendMessageMutation.isPending ? "Sending..." : "Send Letter"}
+              Send a Letter
             </button>
-          </form>
-        </div>
-
-        <div className={`rounded-lg ${colors.background.card} p-6 ${colors.shadow.sm}`}>
-          <h2 className={`${colors.text.primary} text-xl font-bold`}>Letters</h2>
+          </div>
           {messagesQuery.isPending ? (
-            <p>Loading letters...</p>
+            <p className="py-8 text-center">Loading letters...</p>
           ) : messagesQuery.error ? (
-            <p className={colors.text.error}>Error loading letters</p>
+            <p className={`py-8 text-center ${colors.text.error}`}>
+              Error loading letters
+            </p>
           ) : (
             <Tab.Group defaultIndex={0}>
-              <Tab.List className="mb-4 flex space-x-2 border-b">
+              <Tab.List className="mb-8 flex space-x-6 border-b">
                 <Tab
                   className={({ selected }) =>
-                    `relative px-4 py-2 focus:outline-none ${
+                    `relative px-8 py-4 focus:outline-none ${
                       selected
-                        ? `border-b-2 ${colors.text.blue.primary} border-blue-500`
+                        ? `border-b-2 ${colors.text.blue.primary} border-teal-500 font-semibold`
                         : `${colors.text.muted} ${colors.interactive.hover.text.blue}`
                     }`
                   }
                 >
-                  Received Letters
+                  📨 Letter Inbox
                   {hasUnreadMessages && (
-                    <span className={`absolute -right-1 -top-1 h-3 w-3 rounded-full ${colors.background.primary}`} />
+                    <span
+                      className={`absolute -right-1 -top-1 h-3 w-3 rounded-full ${colors.background.notification}`}
+                    />
                   )}
                 </Tab>
                 <Tab
                   className={({ selected }) =>
-                    `px-4 py-2 focus:outline-none ${
+                    `px-8 py-4 focus:outline-none ${
                       selected
-                        ? `border-b-2 ${colors.text.blue.primary} border-blue-500`
+                        ? `border-b-2 ${colors.text.blue.primary} border-teal-500 font-semibold`
                         : `${colors.text.muted} ${colors.interactive.hover.text.blue}`
                     }`
                   }
                 >
-                  Sent Letters
+                  📫 Letter Outbox
                 </Tab>
               </Tab.List>
               <Tab.Panels>
                 <Tab.Panel>
-                  <div className="mb-4 flex justify-end">
-                    <button
-                      onClick={() => {
-                        markAllMessagesAsReadMutation.mutate({ authToken });
-                      }}
-                      disabled={markAllMessagesAsReadMutation.isPending || !hasUnreadMessages}
-                      className={`rounded-md ${colors.background.primary} px-4 py-2 ${colors.text.white} ${colors.interactive.hover.bg.blue} ${colors.background.disabled}`}
-                    >
-                      {markAllMessagesAsReadMutation.isPending ? "Marking as read..." : "Read All"}
-                    </button>
-                  </div>
-                  <div className="space-y-4">
+                  <div className="space-y-8">
                     {messagesQuery.data?.receivedMessages.map((message) => (
                       <LetterItem
                         key={message.id}
@@ -190,27 +122,40 @@ export default function HomePage() {
                       />
                     ))}
                     {messagesQuery.data?.receivedMessages.length === 0 && (
-                      <p className={colors.text.muted}>No received letters</p>
+                      <p className={`py-12 text-center ${colors.text.muted}`}>
+                        No received letters
+                      </p>
                     )}
                   </div>
                 </Tab.Panel>
-                <Tab.Panel className="space-y-4">
-                  {messagesQuery.data?.sentMessages.map((message) => (
-                    <LetterItem
-                      key={message.id}
-                      message={message}
-                      currentUsername={username}
-                    />
-                  ))}
-                  {messagesQuery.data?.sentMessages.length === 0 && (
-                    <p className={colors.text.muted}>No sent letters</p>
-                  )}
+                <Tab.Panel>
+                  <div className="space-y-8">
+                    {messagesQuery.data?.sentMessages.map((message) => (
+                      <LetterItem
+                        key={message.id}
+                        message={message}
+                        currentUsername={username}
+                      />
+                    ))}
+                    {messagesQuery.data?.sentMessages.length === 0 && (
+                      <p className={`py-12 text-center ${colors.text.muted}`}>
+                        No sent letters
+                      </p>
+                    )}
+                  </div>
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
           )}
         </div>
       </div>
+
+      <SendLetterDialog
+        isOpen={isSendDialogOpen}
+        onClose={() => setIsSendDialogOpen(false)}
+        authToken={authToken}
+        onSuccess={() => void messagesQuery.refetch()}
+      />
     </div>
   );
 }

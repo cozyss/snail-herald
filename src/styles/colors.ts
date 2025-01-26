@@ -9,23 +9,25 @@ export const colors = {
     error: "text-red-600", // Error messages
     white: "text-white", // White text for dark backgrounds
     blue: {
-      primary: "text-blue-600", // Primary blue text
-      light: "text-blue-100", // Light blue text for contrast on dark backgrounds
+      primary: "text-teal-600", // Primary teal text (formerly blue)
+      light: "text-teal-100", // Light teal text for contrast on dark backgrounds
     },
   },
 
   // Background colors
   background: {
-    page: "bg-gray-50", // Main page background
+    page: "bg-amber-50", // Main page background
     card: "bg-white", // Card/container backgrounds
-    primary: "bg-green-900", // Primary action backgrounds
+    primary: "bg-emerald-900", // Primary action backgrounds
+    secondary: "bg-orange-400", // Secondary action backgrounds
     hover: {
-      primary: "hover:bg-green-800", // Hover state for primary buttons
+      primary: "hover:bg-orange-600", // Hover state for primary buttons
       card: "hover:bg-gray-50", // Hover state for cards
     },
-    disabled: "bg-blue-400", // Disabled state for buttons
+    disabled: "bg-gray-400", // Disabled state for buttons
+    notification: "bg-red-500", // Notification dot
     badge: {
-      admin: "bg-blue-100", // Admin badge background
+      admin: "bg-teal-100", // Admin badge background
       user: "bg-gray-100", // User badge background
     },
     backdrop: "bg-black/40", // Modal backdrop with opacity
@@ -36,11 +38,11 @@ export const colors = {
     input: {
       normal: "border-gray-300", // Default input borders
       error: "border-red-500", // Error state borders
-      focus: "focus:ring-blue-600", // Focus state ring color
+      focus: "focus:ring-teal-600", // Focus state ring color
     },
     card: {
       normal: "border-gray-200", // Card borders
-      hover: "hover:border-blue-200", // Card hover state borders
+      hover: "hover:border-emerald-400", // Card hover state borders
     },
     divider: "divide-gray-200", // Divider lines
   },
@@ -54,17 +56,17 @@ export const colors = {
 
   // Badge text colors
   badge: {
-    admin: "text-blue-800", // Admin badge text
+    admin: "text-teal-800", // Admin badge text
     user: "text-gray-800", // User badge text
   },
 
   // Ring focus styles
   ring: {
     focus: {
-      blue: "focus:ring-blue-600", // Focus ring
+      blue: "focus:ring-teal-600", // Focus ring
       white: "focus:ring-white", // White focus ring
       offset: {
-        blue: "focus:ring-offset-blue-600", // Offset for focus ring
+        blue: "focus:ring-offset-teal-600", // Offset for focus ring
       },
     },
   },
@@ -73,12 +75,14 @@ export const colors = {
   interactive: {
     hover: {
       text: {
-        blue: "hover:text-blue-700", // Text hover
-        light: "hover:text-blue-100", // Light text hover
+        blue: "hover:text-teal-700", // Text hover
+        light: "hover:text-teal-100", // Light text hover
+        orange: "hover:text-orange-600", // Text hover
       },
       bg: {
-        blue: "hover:bg-blue-700", // Background hover
-        light: "hover:bg-blue-50", // Light background hover
+        blue: "hover:bg-teal-700", // Background hover
+        light: "hover:bg-teal-50", // Light background hover
+        orange: "hover:bg-orange-600", // Background hover
       },
     },
   },

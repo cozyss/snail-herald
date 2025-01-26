@@ -61,7 +61,7 @@ export function MessageItem({
               />
             </div>
           )}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center">
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className={`text-sm font-medium ${colors.text.muted}`}>
@@ -74,19 +74,16 @@ export function MessageItem({
                 </span>
               </div>
             </div>
-            <div className={`text-sm ${colors.text.muted}`}>
-              {new Date(message.createdAt).toLocaleString([], {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })}
-            </div>
           </div>
-          <div className={`mt-2 ${colors.text.blue.primary} font-medium transition-colors duration-200 ${colors.interactive.hover.text.blue}`}>
-            Open letter
+          <div className={`absolute bottom-6 right-6 text-sm ${colors.text.muted}`}>
+            {new Date(message.createdAt).toLocaleString([], {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            })}
           </div>
         </div>
       </div>
