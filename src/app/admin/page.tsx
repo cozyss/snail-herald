@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { colors } from "@/styles/colors";
 import { SendAnnouncementDialog } from "@/components/SendAnnouncementDialog";
+import { FeaturesRequestedWindow } from "@/components/FeaturesRequestedWindow";
 import { useTranslation } from "@/utils/i18n";
 
 type DelaySettingsFormData = {
@@ -90,6 +91,7 @@ export default function AdminDashboard() {
     <div>
       <NavigationBar username={username} isAdmin={isAdmin} />
       <div className="container mx-auto max-w-6xl p-4">
+        <FeaturesRequestedWindow authToken={authToken} isAdmin={true} />
         <div className={`mb-4 flex justify-end`}>
           <button
             onClick={() => setIsAnnouncementDialogOpen(true)}

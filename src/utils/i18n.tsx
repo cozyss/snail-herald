@@ -7,6 +7,17 @@ export type Language = "en" | "zh";
 
 type Translations = {
   [key in Language]: {
+    // Feature Requests
+    featuresRequested: string;
+    newFeatureRequest: string;
+    featureDescriptionRequired: string;
+    typeFeatureDescription: string;
+    creating: string;
+    create: string;
+    by: string;
+    featureRequestCreated: string;
+    featureRequestDeleted: string;
+
     // Navigation
     home: string;
     dashboard: string;
@@ -85,6 +96,17 @@ type Translations = {
 
 export const translations: Translations = {
   en: {
+    // Feature Requests
+    featuresRequested: "Features Requested",
+    newFeatureRequest: "New Feature Request",
+    featureDescriptionRequired: "Feature description is required",
+    typeFeatureDescription: "Describe the feature you'd like to see...",
+    creating: "Creating...",
+    create: "Create",
+    by: "by",
+    featureRequestCreated: "Feature request created successfully!",
+    featureRequestDeleted: "Feature request deleted successfully",
+
     // Navigation
     home: "Home",
     dashboard: "Dashboard",
@@ -160,6 +182,17 @@ export const translations: Translations = {
     usernameTaken: "Username already taken",
   },
   zh: {
+    // Feature Requests
+    featuresRequested: "功能请求",
+    newFeatureRequest: "新功能请求",
+    featureDescriptionRequired: "请输入功能描述",
+    typeFeatureDescription: "描述您想要看到的功能...",
+    creating: "创建中...",
+    create: "创建",
+    by: "来自",
+    featureRequestCreated: "功能请求创建成功！",
+    featureRequestDeleted: "功能请求删除成功",
+
     // Navigation
     home: "主页",
     dashboard: "仪表板",

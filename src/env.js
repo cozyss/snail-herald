@@ -14,6 +14,7 @@ export const env = createEnv({
     APP_PASSWORD: z.string().min(1),
     SECRET_QUESTION: z.string().min(1),
     SECRET_ANSWER: z.string().min(1),
+    JWT_SECRET: z.string().min(1),
   },
 
   /**
@@ -35,6 +36,7 @@ export const env = createEnv({
     APP_PASSWORD: process.env.APP_PASSWORD,
     SECRET_QUESTION: process.env.SECRET_QUESTION,
     SECRET_ANSWER: process.env.SECRET_ANSWER,
+    JWT_SECRET: process.env.JWT_SECRET,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

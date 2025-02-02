@@ -18,6 +18,8 @@ model User {
   createdAt       DateTime  @default(now())
   sentMessages    Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
+  featureRequests FeatureRequest[] @relation("CreatedFeatureRequests")
+  featureActions  FeatureAction[]  @relation("UserFeatureActions")
 }
 
 model Message {
@@ -38,4 +40,23 @@ model DelaySetting {
   minDelay  Int      @default(0)
   maxDelay  Int      @default(0)
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model FeatureRequest {
+  id          Int             @id @default(autoincrement())
+  description String
+  createdAt   DateTime        @default(now())
+  createdBy   User           @relation("CreatedFeatureRequests", fields: [createdById], references: [id])
+  createdById Int
+  actions     FeatureAction[] @relation("FeatureRequestActions")
+}
+
+model FeatureAction {
+  id              Int            @id @default(autoincrement())
+  type            String         // "CREATE", "UPVOTE", "DOWNVOTE"
+  createdAt       DateTime       @default(now())
+  user            User           @relation("UserFeatureActions", fields: [userId], references: [id])
+  userId          Int
+  featureRequest  FeatureRequest @relation("FeatureRequestActions", fields: [featureRequestId], references: [id])
+  featureRequestId Int
 }
