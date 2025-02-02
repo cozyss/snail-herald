@@ -123,7 +123,7 @@ export function FeaturesRequestedWindow({ authToken, isAdmin }: FeaturesRequeste
           <form onSubmit={onSubmit} className="mb-4">
             <textarea
               {...register("description", { required: t("featureDescriptionRequired") })}
-              className={`w-full rounded-lg border ${colors.border.input.normal} p-3 text-sm ${colors.text.secondary} focus:outline-none ${colors.ring.focus.blue} focus:border-transparent`}
+              className={`w-full rounded-lg border ${colors.border.input.normal} p-3 text-sm ${colors.text.secondary} focus:outline-none ${colors.ring.focus.blue}`}
               rows={3}
               placeholder={t("typeFeatureDescription")}
             />
