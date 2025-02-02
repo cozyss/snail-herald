@@ -8,7 +8,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { LanguageProvider } from "@/utils/i18n";
 
 export const metadata: Metadata = {
-  title: "Herald",
+  title: "Snail Herald",
   description: "A time-delayed letter application",
   icons: [
     { rel: "icon", url: "/favicon.ico" }

@@ -21,15 +21,16 @@ model User {
 }
 
 model Message {
-  id          Int      @id @default(autoincrement())
-  content     String
-  createdAt   DateTime @default(now())
-  visibleAt   DateTime @default(now())
-  isRead      Boolean  @default(false)
-  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
-  senderId    Int
-  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
-  receiverId  Int
+  id             Int      @id @default(autoincrement())
+  content        String
+  createdAt      DateTime @default(now())
+  visibleAt      DateTime @default(now())
+  isRead         Boolean  @default(false)
+  isAnnouncement Boolean  @default(false)
+  sender         User     @relation("SentMessages", fields: [senderId], references: [id])
+  senderId       Int
+  receiver       User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  receiverId     Int
 }
 
 model DelaySetting {

@@ -21,7 +21,13 @@ export const getUserMessages = procedure
           where: {
             senderId: decoded.userId,
           },
-          include: {
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            visibleAt: true,
+            isRead: true,
+            isAnnouncement: true,
             sender: {
               select: {
                 username: true,
@@ -45,7 +51,13 @@ export const getUserMessages = procedure
               lte: new Date(),
             },
           },
-          include: {
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            visibleAt: true,
+            isRead: true,
+            isAnnouncement: true,
             sender: {
               select: {
                 username: true,

@@ -30,6 +30,7 @@ export function LetterItem({ message, currentUsername, onMessageRead }: LetterIt
   const { t } = useTranslation();
   const isSender = message.sender.username === currentUsername;
   const isAnnouncement = message.sender.isAdmin && !isSender;
+  const isUnread = !message.isRead && !isSender;
 
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
@@ -38,7 +39,7 @@ export function LetterItem({ message, currentUsername, onMessageRead }: LetterIt
     }
   };
 
-  const previewText = message.content.slice(0, 25) + (message.content.length > 25 ? "..." : "");
+  const previewText = isUnread ? t("openLetter") : message.content.slice(0, 20) + (message.content.length > 20 ? "..." : "");
 
   return (
     <>
@@ -47,7 +48,7 @@ export function LetterItem({ message, currentUsername, onMessageRead }: LetterIt
           className={`relative w-full rounded-lg border ${colors.border.card.normal} ${isAnnouncement ? 'bg-amber-100' : colors.background.card} p-6 ${colors.shadow.sm} transition-all duration-200 ${colors.border.card.hover} ${colors.shadow.hover} cursor-pointer min-h-[100px]`}
           onClick={handleOpenDialog}
         >
-          {!isSender && !message.sender.isAdmin && (
+          {isUnread && (
             <div className="absolute top-2 right-2 w-16 h-16 transition-transform duration-200 hover:scale-105">
               <Image
                 src="/stamp.jpeg"
@@ -73,7 +74,7 @@ export function LetterItem({ message, currentUsername, onMessageRead }: LetterIt
                   </span>
                 )}
               </div>
-              <div className={`mt-2 text-sm ${colors.text.muted}`}>
+              <div className={`mt-2 text-sm ${colors.text.muted} ${isUnread ? 'italic' : ''}`}>
                 {previewText}
               </div>
             </div>

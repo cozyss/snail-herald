@@ -16,7 +16,7 @@ type Translations = {
     logout: string;
 
     // Home page
-    letterPile: string;
+    letterPileWithUsername: string;
     sendLetter: string;
     loadingLetters: string;
     errorLoadingLetters: string;
@@ -26,8 +26,7 @@ type Translations = {
     noSentLetters: string;
 
     // Login/Register
-    signInAccount: string;
-    createAccount: string;
+    slogan: string;
     username: string;
     password: string;
     usernameRequired: string;
@@ -50,6 +49,7 @@ type Translations = {
     send: string;
     letterContent: string;
     enterUsername: string;
+    openLetter: string;
 
     // Admin
     sendAnnouncement: string;
@@ -94,7 +94,7 @@ export const translations: Translations = {
     logout: "Logout",
 
     // Home page
-    letterPile: "📮 The Pile of Letters",
+    letterPileWithUsername: "📮 {username}'s Pile of Letters",
     sendLetter: "Send a Letter",
     loadingLetters: "Loading letters...",
     errorLoadingLetters: "Error loading letters",
@@ -104,8 +104,7 @@ export const translations: Translations = {
     noSentLetters: "No sent letters",
 
     // Login/Register
-    signInAccount: "Sign in to your account",
-    createAccount: "Create your account",
+    slogan: "Slow messages, more love",
     username: "Username",
     password: "Password",
     usernameRequired: "Username is required",
@@ -128,6 +127,7 @@ export const translations: Translations = {
     send: "Send",
     letterContent: "Letter content is required",
     enterUsername: "Enter username",
+    openLetter: "Open Letter",
 
     // Admin
     sendAnnouncement: "Send an Announcement",
@@ -169,7 +169,7 @@ export const translations: Translations = {
     logout: "退出",
 
     // Home page
-    letterPile: "📮 信件堆",
+    letterPileWithUsername: "📮 {username}的信件堆",
     sendLetter: "发送信件",
     loadingLetters: "加载信件中...",
     errorLoadingLetters: "加载信件出错",
@@ -179,8 +179,7 @@ export const translations: Translations = {
     noSentLetters: "没有发送的信件",
 
     // Login/Register
-    signInAccount: "登录您的账户",
-    createAccount: "创建您的账户",
+    slogan: "车马很快，邮件还是可以很慢",
     username: "用户名",
     password: "密码",
     usernameRequired: "请输入用户名",
@@ -203,6 +202,7 @@ export const translations: Translations = {
     send: "发送",
     letterContent: "信件内容不能为空",
     enterUsername: "输入用户名",
+    openLetter: "打开信件",
 
     // Admin
     sendAnnouncement: "发送公告",
@@ -239,7 +239,7 @@ export const translations: Translations = {
 type LanguageContextType = {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: keyof typeof translations.en) => string;
+  t: (key: keyof typeof translations.en, params?: Record<string, string>) => string;
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
@@ -271,7 +271,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, [cookies.language, setCookie]);
 
-  const t = (key: keyof typeof translations.en) => translations[language][key];
+  const t = (key: keyof typeof translations.en, params?: Record<string, string>) => {
+    let text = translations[language][key];
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        text = text.replace(`{${key}}`, value);
+      });
+    }
+    return text;
+  };
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>

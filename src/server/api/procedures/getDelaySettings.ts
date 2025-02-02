@@ -17,19 +17,8 @@ export const getDelaySettings = procedure
   )
   .query(async ({ input }) => {
     try {
-      const decoded = jwt.verify(input.authToken, JWT_SECRET) as { userId: number };
-
-      // Check if user is admin
-      const user = await db.user.findUnique({
-        where: { id: decoded.userId },
-      });
-
-      if (!user?.isAdmin) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Only admins can access delay settings",
-        });
-      }
+      // Verify token is valid but don't check for admin
+      jwt.verify(input.authToken, JWT_SECRET);
 
       // Get or create delay settings
       let settings = await db.delaySetting.findUnique({

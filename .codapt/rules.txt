@@ -1,0 +1,1 @@
+Whenever we're calling an LLM use the model `anthropic("claude-3-5-sonnet-20240620")` from `@ai-sdk/anthropic`.

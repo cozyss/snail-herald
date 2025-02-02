@@ -151,6 +151,7 @@ export default function AdminDashboard() {
                     {...register("minDelay", {
                       required: "Required",
                       min: { value: 0, message: "Must be 0 or greater" },
+                      valueAsNumber: true,
                     })}
                     className={`w-full rounded-md border ${colors.border.input.normal} px-3 py-2 focus:outline-none`}
                   />
@@ -173,6 +174,7 @@ export default function AdminDashboard() {
                     {...register("maxDelay", {
                       required: "Required",
                       min: { value: 0, message: "Must be 0 or greater" },
+                      valueAsNumber: true,
                     })}
                     className={`w-full rounded-md border ${colors.border.input.normal} px-3 py-2 focus:outline-none`}
                   />

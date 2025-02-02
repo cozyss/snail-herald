@@ -46,26 +46,20 @@ export const sendAnnouncement = procedure
       },
     });
 
-    // Get delay settings
-    const delaySettings = await db.delaySetting.findUnique({
-      where: { id: 1 },
-    });
-
-    const minDelay = delaySettings?.minDelay ?? 0;
-    const maxDelay = delaySettings?.maxDelay ?? 0;
-
-    // Create messages for all users
+    // Create messages for all users - announcements are immediately visible
     const messages = await Promise.all(
       users.map(async (user) => {
-        const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-        const visibleAt = new Date(Date.now() + randomDelay * 1000);
-
         return db.message.create({
           data: {
             content: input.content,
             senderId: decoded.userId,
             receiverId: user.id,
-            visibleAt,
+            visibleAt: new Date(), // Immediately visible
+            isAnnouncement: true, // Set this to true for announcements
+          },
+          include: {
+            sender: true,
+            receiver: true,
           },
         });
       })
@@ -74,5 +68,6 @@ export const sendAnnouncement = procedure
     return {
       success: true,
       message: `Announcement sent to ${messages.length} users`,
+      data: messages,
     };
   });

@@ -43,7 +43,7 @@ export function MessageItem({
     }
   };
 
-  const previewText = message.content.slice(0, 25) + (message.content.length > 25 ? "..." : "");
+  const previewText = message.content.slice(0, 20) + (message.content.length > 20 ? "..." : "");
 
   return (
     <>
