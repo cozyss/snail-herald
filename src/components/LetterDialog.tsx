@@ -52,7 +52,7 @@ export function LetterDialog({ isOpen, onClose, message, isSender, isAnnouncemen
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className={`w-full max-w-2xl transform overflow-hidden rounded-2xl ${isAnnouncement ? 'bg-amber-100' : colors.background.card} p-8 text-left align-middle shadow-xl transition-all`}>
+              <Dialog.Panel className={`w-full max-w-2xl transform overflow-hidden rounded-2xl ${colors.background.card} p-8 text-left align-middle shadow-xl transition-all`}>
                 <Dialog.Title as="h3" className={`text-xl font-semibold leading-6 ${colors.text.blue.primary} border-b border-blue-100 pb-4`}>
                   {isAnnouncement && (
                     <span className={`inline-block mb-2 px-2 py-0.5 text-sm font-medium rounded-full ${colors.background.badge.admin} ${colors.badge.admin}`}>
@@ -67,7 +67,7 @@ export function LetterDialog({ isOpen, onClose, message, isSender, isAnnouncemen
                   </div>
                 </Dialog.Title>
                 <div 
-                  className={`mt-8 min-h-[300px] ${isAnnouncement ? 'bg-amber-100' : colors.background.card} rounded-lg p-6`} 
+                  className={`mt-8 min-h-[300px] ${colors.background.card} rounded-lg p-6`} 
                   style={{ 
                     backgroundImage: 'linear-gradient(#e5e7eb 1px, transparent 1px)',
                     backgroundSize: '100% 32px',

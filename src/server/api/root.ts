@@ -13,6 +13,7 @@ import { getFeatureRequests } from "./procedures/getFeatureRequests";
 import { createFeatureRequest } from "./procedures/createFeatureRequest";
 import { voteOnFeature } from "./procedures/voteOnFeature";
 import { deleteFeatureRequest } from "./procedures/deleteFeatureRequest";
+import { getRemainingActionPoints } from "./procedures/getRemainingActionPoints";
 
 export const appRouter = createTRPCRouter({
   registerUser,
@@ -29,6 +30,7 @@ export const appRouter = createTRPCRouter({
   createFeatureRequest,
   voteOnFeature,
   deleteFeatureRequest,
+  getRemainingActionPoints,
 });
 
 // export type definition of API

@@ -17,6 +17,7 @@ type Translations = {
     by: string;
     featureRequestCreated: string;
     featureRequestDeleted: string;
+    actionPointsLeft: string;
 
     // Navigation
     home: string;
@@ -106,6 +107,7 @@ export const translations: Translations = {
     by: "by",
     featureRequestCreated: "Feature request created successfully!",
     featureRequestDeleted: "Feature request deleted successfully",
+    actionPointsLeft: "Action Points: {points}",
 
     // Navigation
     home: "Home",
@@ -192,6 +194,7 @@ export const translations: Translations = {
     by: "来自",
     featureRequestCreated: "功能请求创建成功！",
     featureRequestDeleted: "功能请求删除成功",
+    actionPointsLeft: "剩余行动点：{points}",
 
     // Navigation
     home: "主页",

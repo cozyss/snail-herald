@@ -31,25 +31,27 @@ export const getFeatureRequests = procedure
         },
       });
 
-      // Calculate vote counts and transform the data
-      return featureRequests.map((request) => {
-        const upvotes = request.actions.filter(
-          (a) => a.type === "UPVOTE",
-        ).length;
-        const downvotes = request.actions.filter(
-          (a) => a.type === "DOWNVOTE",
-        ).length;
+      // Calculate vote counts, transform the data, and sort by score
+      return featureRequests
+        .map((request) => {
+          const upvotes = request.actions.filter(
+            (a) => a.type === "UPVOTE",
+          ).length;
+          const downvotes = request.actions.filter(
+            (a) => a.type === "DOWNVOTE",
+          ).length;
 
-        return {
-          id: request.id,
-          description: request.description,
-          createdAt: request.createdAt,
-          createdBy: request.createdBy.username,
-          score: upvotes - downvotes,
-          upvotes,
-          downvotes,
-        };
-      });
+          return {
+            id: request.id,
+            description: request.description,
+            createdAt: request.createdAt,
+            createdBy: request.createdBy.username,
+            score: upvotes - downvotes,
+            upvotes,
+            downvotes,
+          };
+        })
+        .sort((a, b) => b.score - a.score); // Sort by score in descending order
     } catch (error) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
