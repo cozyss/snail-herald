@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { colors } from "@/styles/colors";
 import { useTranslation } from "@/utils/i18n";
@@ -21,10 +21,27 @@ type LetterDialogProps = {
   };
   isSender: boolean;
   isAnnouncement?: boolean;
+  isEditable?: boolean;
+  onSave?: (content: string) => void;
 };
 
-export function LetterDialog({ isOpen, onClose, message, isSender, isAnnouncement }: LetterDialogProps) {
+export function LetterDialog({ 
+  isOpen, 
+  onClose, 
+  message, 
+  isSender, 
+  isAnnouncement,
+  isEditable,
+  onSave 
+}: LetterDialogProps) {
   const { t } = useTranslation();
+  const [editedContent, setEditedContent] = useState(message.content);
+
+  const handleSave = () => {
+    if (onSave) {
+      onSave(editedContent);
+    }
+  };
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -67,43 +84,65 @@ export function LetterDialog({ isOpen, onClose, message, isSender, isAnnouncemen
                   </div>
                 </Dialog.Title>
                 <div 
-                  className={`mt-8 min-h-[300px] ${colors.background.card} rounded-lg p-6`} 
+                  className={`mt-8 min-h-[300px] ${colors.background.card} rounded-lg p-6 overflow-y-auto max-h-[60vh]`} 
                   style={{ 
                     backgroundImage: 'linear-gradient(#e5e7eb 1px, transparent 1px)',
-                    backgroundSize: '100% 32px',
-                    backgroundPosition: '0 32px',
-                    paddingTop: '0'
+                    backgroundSize: '100% 2rem',
+                    backgroundPosition: '0 0.5rem',
                   }}
                 >
-                  <p 
-                    className={`${colors.text.secondary} whitespace-pre-wrap text-lg`}
-                    style={{
-                      lineHeight: '32px',
-                      margin: 0,
-                      paddingBottom: '16px'
-                    }}
-                  >
-                    {message.content}
-                  </p>
+                  {isEditable ? (
+                    <textarea
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                      className={`w-full h-full min-h-[280px] bg-transparent ${colors.text.secondary} text-lg leading-8`}
+                      style={{
+                        resize: 'vertical',
+                        border: 'none',
+                        outline: 'none',
+                        padding: '0.5rem 0',
+                      }}
+                    />
+                  ) : (
+                    <div 
+                      className={`${colors.text.secondary} whitespace-pre-wrap text-lg leading-8`}
+                      style={{
+                        padding: '0.5rem 0',
+                      }}
+                    >
+                      {message.content}
+                    </div>
+                  )}
                 </div>
-                <div className={`mt-6 text-sm ${colors.text.muted} font-medium`}>
-                  {t("sentAt")} {new Date(message.createdAt).toLocaleString([], {
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true
-                  })}
-                </div>
+                {!isEditable && (
+                  <div className={`mt-6 text-sm ${colors.text.muted} font-medium`}>
+                    {t("sentAt")} {new Date(message.createdAt).toLocaleString([], {
+                      year: 'numeric',
+                      month: 'numeric',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true
+                    })}
+                  </div>
+                )}
 
-                <div className="mt-8">
+                <div className="mt-8 flex justify-end gap-4">
+                  {isEditable && (
+                    <button
+                      type="button"
+                      className={`inline-flex justify-center rounded-md border border-transparent ${colors.background.primary} px-6 py-2.5 text-sm font-medium ${colors.text.white} transition-all duration-200 ${colors.interactive.hover.bg.blue} hover:shadow-md focus:outline-none focus:ring-2 ${colors.ring.focus.blue} focus:ring-offset-2`}
+                      onClick={handleSave}
+                    >
+                      {t("save")}
+                    </button>
+                  )}
                   <button
                     type="button"
                     className={`inline-flex justify-center rounded-md border border-transparent ${colors.background.primary} px-6 py-2.5 text-sm font-medium ${colors.text.white} transition-all duration-200 ${colors.interactive.hover.bg.blue} hover:shadow-md focus:outline-none focus:ring-2 ${colors.ring.focus.blue} focus:ring-offset-2`}
                     onClick={onClose}
                   >
-                    {t("closeLetter")}
+                    {isEditable ? t("cancel") : t("closeLetter")}
                   </button>
                 </div>
               </Dialog.Panel>

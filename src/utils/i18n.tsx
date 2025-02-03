@@ -81,6 +81,21 @@ type Translations = {
     role: string;
     admin: string;
     user: string;
+    messageSettings: string;
+    communication: string;
+    userManagement: string;
+    welcomeLetterTemplate: string;
+    welcomeLetter: string;
+    edit: string;
+    save: string;
+    saving: string;
+    welcomeTemplateUpdated: string;
+    totalUsers: string;
+    totalAdmins: string;
+    totalLetters: string;
+    lastModified: string;
+    characters: string;
+    messageDelaySettings: string;
 
     // Success/Error messages
     loginSuccess: string;
@@ -171,6 +186,21 @@ export const translations: Translations = {
     role: "Role",
     admin: "Admin",
     user: "User",
+    messageSettings: "Message Settings",
+    communication: "Communication",
+    userManagement: "User Management",
+    welcomeLetterTemplate: "Welcome Letter Template",
+    welcomeLetter: "Welcome Letter",
+    edit: "Edit",
+    save: "Save",
+    saving: "Saving...",
+    welcomeTemplateUpdated: "Welcome template updated successfully!",
+    totalUsers: "Total Users",
+    totalAdmins: "Total Admins",
+    totalLetters: "Total Letters",
+    lastModified: "Last Modified",
+    characters: "characters",
+    messageDelaySettings: "Message Delay Settings",
 
     // Success/Error messages
     loginSuccess: "Login successful!",
@@ -258,6 +288,21 @@ export const translations: Translations = {
     role: "角色",
     admin: "管理员",
     user: "用户",
+    messageSettings: "消息设置",
+    communication: "通信",
+    userManagement: "用户管理",
+    welcomeLetterTemplate: "欢迎信模板",
+    welcomeLetter: "欢迎信",
+    edit: "编辑",
+    save: "保存",
+    saving: "保存中...",
+    welcomeTemplateUpdated: "欢迎信模板更新成功！",
+    totalUsers: "总用户数",
+    totalAdmins: "管理员数量",
+    totalLetters: "总信件数",
+    lastModified: "最后修改",
+    characters: "字符",
+    messageDelaySettings: "消息延迟设置",
 
     // Success/Error messages
     loginSuccess: "登录成功！",

@@ -42,6 +42,12 @@ model DelaySetting {
   updatedAt DateTime @default(now()) @updatedAt
 }
 
+model WelcomeTemplate {
+  id        Int      @id @default(1)
+  content   String   @default("Welcome to Snail Herald! We're excited to have you join our community. Take your time to explore and enjoy sending letters to others.")
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
 model FeatureRequest {
   id          Int             @id @default(autoincrement())
   description String
