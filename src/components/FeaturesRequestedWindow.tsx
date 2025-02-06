@@ -24,24 +24,34 @@ function ActionPoints({ authToken }: { authToken: string }) {
 
   return (
     <div className="flex justify-center">
-      <div className={`px-4 py-1.5 rounded-full ${colors.background.badge.admin} ${colors.badge.admin} text-sm font-medium`}>
+      <div
+        className={`rounded-full px-4 py-1.5 ${colors.background.badge.admin} ${colors.badge.admin} text-sm font-medium`}
+      >
         {t("actionPointsLeft", { points: pointsQuery.data.points.toString() })}
       </div>
     </div>
   );
 }
 
-export function FeaturesRequestedWindow({ authToken, isAdmin }: FeaturesRequestedWindowProps) {
+export function FeaturesRequestedWindow({
+  authToken,
+  isAdmin,
+}: FeaturesRequestedWindowProps) {
   const { t } = useTranslation();
   const [isCreating, setIsCreating] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<{
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<{
     description: string;
   }>();
 
   const featuresQuery = api.getFeatureRequests.useQuery(
     { authToken },
-    { refetchInterval: 5000 }
+    { refetchInterval: 5000 },
   );
 
   const createFeatureMutation = api.createFeatureRequest.useMutation({
@@ -82,7 +92,10 @@ export function FeaturesRequestedWindow({ authToken, isAdmin }: FeaturesRequeste
     });
   });
 
-  const handleVote = (featureRequestId: number, voteType: "UPVOTE" | "DOWNVOTE") => {
+  const handleVote = (
+    featureRequestId: number,
+    voteType: "UPVOTE" | "DOWNVOTE",
+  ) => {
     voteMutation.mutate({
       authToken,
       featureRequestId,
@@ -91,7 +104,9 @@ export function FeaturesRequestedWindow({ authToken, isAdmin }: FeaturesRequeste
   };
 
   const handleDelete = (featureRequestId: number) => {
-    if (window.confirm("Are you sure you want to delete this feature request?")) {
+    if (
+      window.confirm("Are you sure you want to delete this feature request?")
+    ) {
       deleteFeatureMutation.mutate({
         authToken,
         featureRequestId,
@@ -100,13 +115,21 @@ export function FeaturesRequestedWindow({ authToken, isAdmin }: FeaturesRequeste
   };
 
   return (
-    <div className={`fixed left-0 top-24 flex transition-transform duration-300 ease-in-out ${isCollapsed ? 'translate-x-[-280px]' : 'translate-x-4'}`}>
-      <div className={`w-80 rounded-lg ${colors.background.card} p-4 ${colors.shadow.md} max-h-[calc(100vh-120px)] flex flex-col`}>
-        <div className="flex flex-col gap-3 mb-4">
-          <h2 className={`text-lg font-semibold ${colors.text.blue.primary} text-center`}>
+    <div
+      className={`fixed left-0 top-24 z-50 flex transition-transform duration-300 ease-in-out ${
+        isCollapsed ? "translate-x-[-290px]" : "translate-x-0"
+      }`}
+    >
+      <div
+        className={`w-[290px] rounded-lg ${colors.background.card} p-4 ${colors.shadow.md} flex max-h-[calc(100vh-120px)] flex-col`}
+      >
+        <div className="mb-4 flex flex-col gap-3">
+          <h2
+            className={`text-lg font-semibold ${colors.text.blue.primary} text-center`}
+          >
             {t("featuresRequested")}
           </h2>
-          
+
           <ActionPoints authToken={authToken} />
 
           {!isCreating && (
@@ -122,7 +145,9 @@ export function FeaturesRequestedWindow({ authToken, isAdmin }: FeaturesRequeste
         {isCreating && (
           <form onSubmit={onSubmit} className="mb-4">
             <textarea
-              {...register("description", { required: t("featureDescriptionRequired") })}
+              {...register("description", {
+                required: t("featureDescriptionRequired"),
+              })}
               className={`w-full rounded-lg border ${colors.border.input.normal} p-3 text-sm ${colors.text.secondary} focus:outline-none ${colors.ring.focus.blue}`}
               rows={3}
               placeholder={t("typeFeatureDescription")}
@@ -151,7 +176,7 @@ export function FeaturesRequestedWindow({ authToken, isAdmin }: FeaturesRequeste
           </form>
         )}
 
-        <div className="space-y-3 overflow-y-auto flex-1">
+        <div className="flex-1 space-y-3 overflow-y-auto">
           {featuresQuery.data?.map((feature) => (
             <div
               key={feature.id}
@@ -171,7 +196,9 @@ export function FeaturesRequestedWindow({ authToken, isAdmin }: FeaturesRequeste
                   score={feature.score}
                   onUpvote={(id) => handleVote(id, "UPVOTE")}
                   onDownvote={(id) => handleVote(id, "DOWNVOTE")}
-                  disabled={voteMutation.isPending || deleteFeatureMutation.isPending}
+                  disabled={
+                    voteMutation.isPending || deleteFeatureMutation.isPending
+                  }
                   isAdmin={isAdmin}
                   onDelete={handleDelete}
                 />
@@ -180,11 +207,13 @@ export function FeaturesRequestedWindow({ authToken, isAdmin }: FeaturesRequeste
           ))}
         </div>
       </div>
-      
+
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className={`h-12 w-8 self-start mt-4 ml-2 rounded-r-lg ${colors.background.primary} ${colors.text.white} flex items-center justify-center transition-colors duration-200 ${colors.interactive.hover.bg.blue}`}
-        aria-label={isCollapsed ? "Expand features panel" : "Collapse features panel"}
+        className={`h-24 w-6 self-start rounded-r-lg ${colors.background.primary} ${colors.text.white} flex items-center justify-center transition-colors duration-200 ${colors.interactive.hover.bg.blue}`}
+        aria-label={
+          isCollapsed ? "Expand features panel" : "Collapse features panel"
+        }
       >
         {isCollapsed ? ">" : "<"}
       </button>

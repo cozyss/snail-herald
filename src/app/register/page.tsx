@@ -21,7 +21,7 @@ type FormData = z.infer<typeof formSchema>;
 export default function RegisterPage() {
   const router = useRouter();
   const { t } = useTranslation();
-  
+
   const {
     register,
     handleSubmit,

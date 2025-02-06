@@ -72,11 +72,14 @@ export default function HomePage() {
       <div className="container mx-auto max-w-4xl px-4 py-12">
         {delaySettingsQuery.data && (
           <div className="mb-4 rounded-lg bg-amber-200 p-4 text-center text-sm font-medium text-amber-800">
-            {t("currentDelayRange")} {delaySettingsQuery.data.minDelay} - {delaySettingsQuery.data.maxDelay} {t("hours")}
+            {t("currentDelayRange")} {delaySettingsQuery.data.minDelay} -{" "}
+            {delaySettingsQuery.data.maxDelay} {t("hours")}
           </div>
         )}
-        <div className={`rounded-lg ${colors.background.card} p-4 sm:p-10 ${colors.shadow.sm}`}>
-          <div className="flex justify-between items-center mb-10">
+        <div
+          className={`rounded-lg ${colors.background.card} p-4 sm:p-10 ${colors.shadow.sm}`}
+        >
+          <div className="mb-10 flex items-center justify-between">
             <h2 className={`${colors.text.primary} text-2xl font-bold`}>
               {t("letterPileWithUsername", { username })}
             </h2>
@@ -98,7 +101,7 @@ export default function HomePage() {
               <Tab.List className="mb-8 flex border-b">
                 <Tab
                   className={({ selected }) =>
-                    `relative flex-1 px-1 py-2.5 text-xs sm:text-base sm:px-6 sm:py-4 focus:outline-none whitespace-nowrap ${
+                    `relative flex-1 whitespace-nowrap px-1 py-2.5 text-xs focus:outline-none sm:px-6 sm:py-4 sm:text-base ${
                       selected
                         ? `border-b-2 ${colors.text.blue.primary} border-teal-500 font-semibold`
                         : `${colors.text.muted} ${colors.interactive.hover.text.blue}`
@@ -109,14 +112,14 @@ export default function HomePage() {
                     <span>{t("letterInbox")}</span>
                     {hasUnreadMessages && (
                       <span
-                        className={`inline-flex h-[8px] w-[8px] sm:h-[10px] sm:w-[10px] rounded-full ${colors.background.notification} ring-2 ring-red-300`}
+                        className={`inline-flex h-[8px] w-[8px] rounded-full sm:h-[10px] sm:w-[10px] ${colors.background.notification} ring-2 ring-red-300`}
                       />
                     )}
                   </div>
                 </Tab>
                 <Tab
                   className={({ selected }) =>
-                    `flex-1 px-1 py-2.5 text-xs sm:text-base sm:px-6 sm:py-4 focus:outline-none whitespace-nowrap ${
+                    `flex-1 whitespace-nowrap px-1 py-2.5 text-xs focus:outline-none sm:px-6 sm:py-4 sm:text-base ${
                       selected
                         ? `border-b-2 ${colors.text.blue.primary} border-teal-500 font-semibold`
                         : `${colors.text.muted} ${colors.interactive.hover.text.blue}`
