@@ -16,6 +16,7 @@ import { deleteFeatureRequest } from "./procedures/deleteFeatureRequest";
 import { getRemainingActionPoints } from "./procedures/getRemainingActionPoints";
 import { getWelcomeTemplate } from "./procedures/getWelcomeTemplate";
 import { updateWelcomeTemplate } from "./procedures/updateWelcomeTemplate";
+import { deleteMessage } from "./procedures/deleteMessage";
 
 export const appRouter = createTRPCRouter({
   registerUser,
@@ -35,6 +36,7 @@ export const appRouter = createTRPCRouter({
   getRemainingActionPoints,
   getWelcomeTemplate,
   updateWelcomeTemplate,
+  deleteMessage,
 });
 
 // export type definition of API

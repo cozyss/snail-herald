@@ -62,6 +62,10 @@ type Translations = {
     letterContent: string;
     enterUsername: string;
     openLetter: string;
+    delete: string;
+    deleting: string;
+    confirmDeleteLetter: string;
+    letterDeletedSuccess: string;
 
     // Admin
     sendAnnouncement: string;
@@ -167,6 +171,10 @@ export const translations: Translations = {
     letterContent: "Letter content is required",
     enterUsername: "Enter username",
     openLetter: "Open Letter",
+    delete: "Delete",
+    deleting: "Deleting...",
+    confirmDeleteLetter: "Are you sure you want to delete this letter?",
+    letterDeletedSuccess: "Letter deleted successfully!",
 
     // Admin
     sendAnnouncement: "Send an Announcement",
@@ -269,6 +277,10 @@ export const translations: Translations = {
     letterContent: "信件内容不能为空",
     enterUsername: "输入用户名",
     openLetter: "打开信件",
+    delete: "删除",
+    deleting: "删除中...",
+    confirmDeleteLetter: "您确定要删除这封信吗？",
+    letterDeletedSuccess: "信件删除成功！",
 
     // Admin
     sendAnnouncement: "发送公告",

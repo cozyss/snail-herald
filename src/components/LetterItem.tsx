@@ -23,9 +23,15 @@ type LetterItemProps = {
   };
   currentUsername: string;
   onMessageRead?: (messageId: number) => void;
+  onLetterDeleted?: () => void;
 };
 
-export function LetterItem({ message, currentUsername, onMessageRead }: LetterItemProps) {
+export function LetterItem({
+  message,
+  currentUsername,
+  onMessageRead,
+  onLetterDeleted,
+}: LetterItemProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { t } = useTranslation();
   const isSender = message.sender.username === currentUsername;
@@ -34,22 +40,28 @@ export function LetterItem({ message, currentUsername, onMessageRead }: LetterIt
 
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
-    if (!message.isRead && new Date(message.visibleAt) <= new Date() && onMessageRead) {
+    if (
+      !message.isRead &&
+      new Date(message.visibleAt) <= new Date() &&
+      onMessageRead
+    ) {
       onMessageRead(message.id);
     }
   };
 
-  const previewText = isUnread ? t("openLetter") : message.content.slice(0, 20) + (message.content.length > 20 ? "..." : "");
+  const previewText = isUnread
+    ? t("openLetter")
+    : message.content.slice(0, 20) + (message.content.length > 20 ? "..." : "");
 
   return (
     <>
       <div className="mb-4 w-full">
-        <div 
-          className={`relative w-full rounded-lg border ${colors.border.card.normal} ${colors.background.card} p-6 ${colors.shadow.sm} transition-all duration-200 ${colors.border.card.hover} ${colors.shadow.hover} cursor-pointer min-h-[100px]`}
+        <div
+          className={`relative w-full rounded-lg border ${colors.border.card.normal} ${colors.background.card} p-6 ${colors.shadow.sm} transition-all duration-200 ${colors.border.card.hover} ${colors.shadow.hover} min-h-[100px] cursor-pointer`}
           onClick={handleOpenDialog}
         >
           {isUnread && (
-            <div className="absolute top-2 right-2 w-16 h-16 transition-transform duration-200 hover:scale-105">
+            <div className="absolute right-2 top-2 h-16 w-16 transition-transform duration-200 hover:scale-105">
               <Image
                 src="/stamp.jpeg"
                 alt="Stamp"
@@ -62,31 +74,41 @@ export function LetterItem({ message, currentUsername, onMessageRead }: LetterIt
           <div className="flex items-center">
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className={`text-sm font-medium ${colors.text.blue.primary}`}>
+                <span
+                  className={`text-sm font-medium ${colors.text.blue.primary}`}
+                >
                   {isSender ? t("to") : t("from")}
                 </span>
                 <span className={`font-semibold ${colors.text.primary}`}>
-                  {isSender ? message.receiver.username : message.sender.username}
+                  {isSender
+                    ? message.receiver.username
+                    : message.sender.username}
                 </span>
                 {isAnnouncement && (
-                  <span className={`ml-2 px-2 py-0.5 text-xs font-medium rounded-full ${colors.background.badge.admin} ${colors.badge.admin}`}>
+                  <span
+                    className={`ml-2 rounded-full px-2 py-0.5 text-xs font-medium ${colors.background.badge.admin} ${colors.badge.admin}`}
+                  >
                     {t("announcement")}
                   </span>
                 )}
               </div>
-              <div className={`mt-2 text-sm ${colors.text.muted} ${isUnread ? 'italic' : ''}`}>
+              <div
+                className={`mt-2 text-sm ${colors.text.muted} ${isUnread ? "italic" : ""}`}
+              >
                 {previewText}
               </div>
             </div>
           </div>
-          <div className={`absolute bottom-6 right-6 text-sm font-medium ${colors.text.muted}`}>
-            {new Date(message.createdAt).toLocaleString([], { 
-              year: 'numeric',
-              month: 'numeric',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: true
+          <div
+            className={`absolute bottom-6 right-6 text-sm font-medium ${colors.text.muted}`}
+          >
+            {new Date(message.createdAt).toLocaleString([], {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
             })}
           </div>
         </div>
@@ -98,6 +120,8 @@ export function LetterItem({ message, currentUsername, onMessageRead }: LetterIt
         message={message}
         isSender={isSender}
         isAnnouncement={isAnnouncement}
+        currentUsername={currentUsername}
+        onLetterDeleted={onLetterDeleted}
       />
     </>
   );
