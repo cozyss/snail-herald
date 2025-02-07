@@ -181,33 +181,37 @@ export function LetterDialog({
                   </div>
                 )}
 
-                <div className="mt-8 flex justify-end gap-4">
-                  {isEditable && (
+                <div className="mt-8 flex justify-between">
+                  <div>
+                    {canDelete && !isAnnouncement && (
+                      <button
+                        type="button"
+                        className={`inline-flex justify-center rounded-md border border-transparent bg-red-600 px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-red-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2`}
+                        onClick={handleDelete}
+                        disabled={deleteMessageMutation.isPending}
+                      >
+                        {deleteMessageMutation.isPending ? t("deleting") : t("delete")}
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex gap-4">
+                    {isEditable && (
+                      <button
+                        type="button"
+                        className={`inline-flex justify-center rounded-md border border-transparent ${colors.background.primary} px-6 py-2.5 text-sm font-medium ${colors.text.white} transition-all duration-200 ${colors.interactive.hover.bg.blue} hover:shadow-md focus:outline-none focus:ring-2 ${colors.ring.focus.blue} focus:ring-offset-2`}
+                        onClick={handleSave}
+                      >
+                        {t("save")}
+                      </button>
+                    )}
                     <button
                       type="button"
                       className={`inline-flex justify-center rounded-md border border-transparent ${colors.background.primary} px-6 py-2.5 text-sm font-medium ${colors.text.white} transition-all duration-200 ${colors.interactive.hover.bg.blue} hover:shadow-md focus:outline-none focus:ring-2 ${colors.ring.focus.blue} focus:ring-offset-2`}
-                      onClick={handleSave}
+                      onClick={onClose}
                     >
-                      {t("save")}
+                      {isEditable ? t("cancel") : t("closeLetter")}
                     </button>
-                  )}
-                  {canDelete && !isAnnouncement && (
-                    <button
-                      type="button"
-                      className={`inline-flex justify-center rounded-md border border-transparent bg-red-600 px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-red-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2`}
-                      onClick={handleDelete}
-                      disabled={deleteMessageMutation.isPending}
-                    >
-                      {deleteMessageMutation.isPending ? t("deleting") : t("delete")}
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    className={`inline-flex justify-center rounded-md border border-transparent ${colors.background.primary} px-6 py-2.5 text-sm font-medium ${colors.text.white} transition-all duration-200 ${colors.interactive.hover.bg.blue} hover:shadow-md focus:outline-none focus:ring-2 ${colors.ring.focus.blue} focus:ring-offset-2`}
-                    onClick={onClose}
-                  >
-                    {isEditable ? t("cancel") : t("closeLetter")}
-                  </button>
+                  </div>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

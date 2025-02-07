@@ -16,7 +16,7 @@ export const getUserMessages = procedure
     try {
       const decoded = jwt.verify(input.authToken, JWT_SECRET) as { userId: number };
 
-      const [sentMessages, receivedMessages] = await Promise.all([
+      const [sentMessages, receivedMessages, pendingMessagesCount] = await Promise.all([
         db.message.findMany({
           where: {
             senderId: decoded.userId,
@@ -74,11 +74,20 @@ export const getUserMessages = procedure
             createdAt: 'desc',
           },
         }),
+        db.message.count({
+          where: {
+            receiverId: decoded.userId,
+            visibleAt: {
+              gt: new Date(),
+            },
+          },
+        }),
       ]);
 
       return {
         sentMessages,
         receivedMessages,
+        pendingMessagesCount,
       };
     } catch (error) {
       throw new TRPCError({

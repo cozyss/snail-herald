@@ -129,7 +129,7 @@ export default function AdminDashboard() {
                     <div className="h-6 w-24 animate-pulse rounded bg-gray-200" />
                   ) : delaySettingsQuery.data ? (
                     <span className={`text-lg font-semibold ${colors.text.primary}`}>
-                      {delaySettingsQuery.data.minDelay} - {delaySettingsQuery.data.maxDelay} {t("hours")}
+                      {delaySettingsQuery.data.minDelay} - {delaySettingsQuery.data.maxDelay} {t("minutes")}
                     </span>
                   ) : (
                     <span className={`text-sm ${colors.text.error}`}>{t("errorLoadingSettings")}</span>
@@ -158,7 +158,7 @@ export default function AdminDashboard() {
                           type="range"
                           id="minDelay"
                           min="0"
-                          max="72"
+                          max="4320"
                           {...register("minDelay", {
                             required: "Required",
                             min: { value: 0, message: "Must be 0 or greater" },
@@ -192,7 +192,7 @@ export default function AdminDashboard() {
                           type="range"
                           id="maxDelay"
                           min="0"
-                          max="72"
+                          max="4320"
                           {...register("maxDelay", {
                             required: "Required",
                             min: { value: 0, message: "Must be 0 or greater" },

@@ -11,6 +11,7 @@ import { colors } from "@/styles/colors";
 import { SendLetterDialog } from "@/components/SendLetterDialog";
 import { useTranslation } from "@/utils/i18n";
 import { FeaturesRequestedWindow } from "@/components/FeaturesRequestedWindow";
+import { EmptyLetterIndicator } from "@/components/EmptyLetterIndicator";
 
 export default function HomePage() {
   const router = useRouter();
@@ -37,7 +38,10 @@ export default function HomePage() {
 
   const messagesQuery = api.getUserMessages.useQuery(
     { authToken: authToken ?? "" },
-    { enabled: !!authToken },
+    { 
+      enabled: !!authToken,
+      refetchInterval: 5000, // Refetch every 5 seconds to check for new messages
+    },
   );
 
   const delaySettingsQuery = api.getDelaySettings.useQuery(
@@ -61,6 +65,8 @@ export default function HomePage() {
     (message) => !message.isRead && new Date(message.visibleAt) <= new Date(),
   );
 
+  const hasPendingMessages = (messagesQuery.data?.pendingMessagesCount ?? 0) > 0;
+
   if (!authToken || !username) {
     return null;
   }
@@ -73,7 +79,7 @@ export default function HomePage() {
         {delaySettingsQuery.data && (
           <div className="mb-4 rounded-lg bg-amber-200 p-4 text-center text-sm font-medium text-amber-800">
             {t("currentDelayRange")} {delaySettingsQuery.data.minDelay} -{" "}
-            {delaySettingsQuery.data.maxDelay} {t("hours")}
+            {delaySettingsQuery.data.maxDelay} {t("minutes")}
           </div>
         )}
         <div
@@ -132,6 +138,7 @@ export default function HomePage() {
               <Tab.Panels>
                 <Tab.Panel>
                   <div className="space-y-8">
+                    {hasPendingMessages && <EmptyLetterIndicator />}
                     {messagesQuery.data?.receivedMessages.map((message) => (
                       <LetterItem
                         key={message.id}
@@ -140,7 +147,7 @@ export default function HomePage() {
                         onMessageRead={handleMessageRead}
                       />
                     ))}
-                    {messagesQuery.data?.receivedMessages.length === 0 && (
+                    {messagesQuery.data?.receivedMessages.length === 0 && !hasPendingMessages && (
                       <p className={`py-12 text-center ${colors.text.muted}`}>
                         {t("noReceivedLetters")}
                       </p>

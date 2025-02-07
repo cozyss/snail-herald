@@ -6,8 +6,8 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET ?? "your-secret-key";
 
-// Convert hours to seconds
-const SECONDS_IN_HOUR = 3600;
+// Convert minutes to seconds
+const SECONDS_IN_MINUTE = 60;
 
 export const getDelaySettings = procedure
   .input(
@@ -35,11 +35,11 @@ export const getDelaySettings = procedure
         });
       }
 
-      // Convert seconds to hours for display
+      // Convert seconds to minutes for display
       return {
         ...settings,
-        minDelay: settings.minDelay / SECONDS_IN_HOUR,
-        maxDelay: settings.maxDelay / SECONDS_IN_HOUR,
+        minDelay: settings.minDelay / SECONDS_IN_MINUTE,
+        maxDelay: settings.maxDelay / SECONDS_IN_MINUTE,
       };
     } catch (error) {
       throw new TRPCError({

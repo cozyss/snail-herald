@@ -6,8 +6,8 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET ?? "your-secret-key";
 
-// Convert hours to seconds
-const SECONDS_IN_HOUR = 3600;
+// Convert minutes to seconds
+const SECONDS_IN_MINUTE = 60;
 
 export const updateDelaySettings = procedure
   .input(
@@ -40,9 +40,9 @@ export const updateDelaySettings = procedure
         });
       }
 
-      // Convert hours to seconds for storage
-      const minDelaySeconds = input.minDelay * SECONDS_IN_HOUR;
-      const maxDelaySeconds = input.maxDelay * SECONDS_IN_HOUR;
+      // Convert minutes to seconds for storage
+      const minDelaySeconds = input.minDelay * SECONDS_IN_MINUTE;
+      const maxDelaySeconds = input.maxDelay * SECONDS_IN_MINUTE;
 
       const settings = await db.delaySetting.upsert({
         where: { id: 1 },
@@ -61,8 +61,8 @@ export const updateDelaySettings = procedure
         message: "Delay settings updated successfully",
         data: {
           ...settings,
-          minDelay: settings.minDelay / SECONDS_IN_HOUR,
-          maxDelay: settings.maxDelay / SECONDS_IN_HOUR,
+          minDelay: settings.minDelay / SECONDS_IN_MINUTE,
+          maxDelay: settings.maxDelay / SECONDS_IN_MINUTE,
         },
       };
     } catch (error) {
