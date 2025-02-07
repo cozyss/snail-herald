@@ -29,10 +29,10 @@ export const translations: Translations = {
     usernameTaken: "Username is already taken",
     registrationSuccess: "Registration successful",
     loginSuccess: "Login successful",
-    letterPileWithUsername: "Letter Pile - {username}",
+    letterPileWithUsername: "📨 {username}'s Pile of Letters",
     sendLetter: "Send Letter",
-    letterInbox: "Letter Inbox",
-    letterOutbox: "Letter Outbox",
+    letterInbox: "📮 Letter Inbox",
+    letterOutbox: "📫 Letter Outbox",
     loadingLetters: "Loading letters...",
     errorLoadingLetters: "Error loading letters",
     noReceivedLetters: "No received letters yet",
@@ -64,7 +64,8 @@ export const translations: Translations = {
     creating: "Creating...",
     featureCreatedSuccess: "Feature request created successfully",
     noFeatureRequests: "No feature requests yet",
-    confirmDeleteFeature: "Are you sure you want to delete this feature request?",
+    confirmDeleteFeature:
+      "Are you sure you want to delete this feature request?",
     featureDeletedSuccess: "Feature request deleted successfully",
     writeAnnouncement: "Write your announcement",
     sendAnnouncement: "Send Announcement",
@@ -152,7 +153,7 @@ export const translations: Translations = {
 };
 
 const TranslationContext = createContext<TranslationContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function TranslationProvider({
@@ -174,7 +175,7 @@ export function TranslationProvider({
 
       return translation;
     },
-    [language]
+    [language],
   );
 
   return (
