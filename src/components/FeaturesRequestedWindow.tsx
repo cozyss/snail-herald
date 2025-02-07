@@ -18,16 +18,14 @@ function ActionPoints({ authToken }: { authToken: string }) {
   const { t } = useTranslation();
   const pointsQuery = api.getRemainingActionPoints.useQuery({ authToken });
 
-  if (pointsQuery.isPending || !pointsQuery.data) {
-    return null;
-  }
-
   return (
     <div className="flex justify-center">
       <div
         className={`rounded-full px-4 py-1.5 ${colors.background.badge.admin} ${colors.badge.admin} text-sm font-medium`}
       >
-        {t("actionPointsLeft", { points: pointsQuery.data.points.toString() })}
+        {pointsQuery.isPending
+          ? "..."
+          : t("remainingActions") + " " + pointsQuery.data?.points.toString()}
       </div>
     </div>
   );
@@ -56,7 +54,7 @@ export function FeaturesRequestedWindow({
 
   const createFeatureMutation = api.createFeatureRequest.useMutation({
     onSuccess: () => {
-      toast.success(t("featureRequestCreated"));
+      toast.success(t("featureCreatedSuccess"));
       setIsCreating(false);
       reset();
       void featuresQuery.refetch();
@@ -77,7 +75,7 @@ export function FeaturesRequestedWindow({
 
   const deleteFeatureMutation = api.deleteFeatureRequest.useMutation({
     onSuccess: () => {
-      toast.success(t("featureRequestDeleted"));
+      toast.success(t("featureDeletedSuccess"));
       void featuresQuery.refetch();
     },
     onError: (error) => {
@@ -104,9 +102,7 @@ export function FeaturesRequestedWindow({
   };
 
   const handleDelete = (featureRequestId: number) => {
-    if (
-      window.confirm("Are you sure you want to delete this feature request?")
-    ) {
+    if (window.confirm(t("confirmDeleteFeature"))) {
       deleteFeatureMutation.mutate({
         authToken,
         featureRequestId,
@@ -121,13 +117,13 @@ export function FeaturesRequestedWindow({
       }`}
     >
       <div
-        className={`w-[290px] rounded-lg ${colors.background.card} p-4 ${colors.shadow.md} flex max-h-[calc(100vh-120px)] flex-col`}
+        className={`w-[290px] rounded-lg border ${colors.border.card.normal} ${colors.background.card} p-4 ${colors.shadow.md} flex max-h-[calc(100vh-120px)] flex-col`}
       >
         <div className="mb-4 flex flex-col gap-3">
           <h2
             className={`text-lg font-semibold ${colors.text.blue.primary} text-center`}
           >
-            {t("featuresRequested")}
+            {t("featureRequests")}
           </h2>
 
           <ActionPoints authToken={authToken} />
@@ -137,7 +133,7 @@ export function FeaturesRequestedWindow({
               onClick={() => setIsCreating(true)}
               className={`w-full rounded-lg ${colors.background.primary} px-4 py-2 text-sm font-medium ${colors.text.white} ${colors.interactive.hover.bg.blue} transition-colors duration-200`}
             >
-              {t("newFeatureRequest")}
+              {t("createFeatureRequest")}
             </button>
           )}
         </div>
@@ -146,11 +142,11 @@ export function FeaturesRequestedWindow({
           <form onSubmit={onSubmit} className="mb-4">
             <textarea
               {...register("description", {
-                required: t("featureDescriptionRequired"),
+                required: t("describeFeature"),
               })}
               className={`w-full rounded-lg border ${colors.border.input.normal} p-3 text-sm ${colors.text.secondary} focus:outline-none ${colors.ring.focus.blue}`}
               rows={3}
-              placeholder={t("typeFeatureDescription")}
+              placeholder={t("describeFeature")}
             />
             {errors.description && (
               <p className={`mt-1 text-sm ${colors.text.error}`}>
@@ -170,7 +166,7 @@ export function FeaturesRequestedWindow({
                 disabled={createFeatureMutation.isPending}
                 className={`rounded-lg ${colors.background.primary} px-4 py-2 text-sm font-medium ${colors.text.white} ${colors.interactive.hover.bg.blue} transition-colors duration-200`}
               >
-                {createFeatureMutation.isPending ? t("creating") : t("create")}
+                {createFeatureMutation.isPending ? t("creating") : t("submit")}
               </button>
             </div>
           </form>
@@ -210,12 +206,22 @@ export function FeaturesRequestedWindow({
 
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className={`h-24 w-6 self-start rounded-r-lg ${colors.background.primary} ${colors.text.white} flex items-center justify-center transition-colors duration-200 ${colors.interactive.hover.bg.blue}`}
+        className={`flex h-auto min-h-[100px] w-8 self-start rounded-r-lg ${
+          colors.background.primary
+        } ${colors.text.white} items-center justify-center transition-colors duration-200 ${
+          colors.interactive.hover.bg.blue
+        }`}
         aria-label={
           isCollapsed ? "Expand features panel" : "Collapse features panel"
         }
       >
-        {isCollapsed ? ">" : "<"}
+        {isCollapsed ? (
+          <span className="rotate-90 whitespace-nowrap px-6 font-medium">
+            {t("featureRequests")}
+          </span>
+        ) : (
+          "<"
+        )}
       </button>
     </div>
   );
